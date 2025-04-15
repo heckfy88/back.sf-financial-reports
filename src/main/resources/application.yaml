@@ -1,6 +1,6 @@
 spring:
   application:
-    name: short-links
+    name: financial-reports
   datasource:
     url:
     username:
