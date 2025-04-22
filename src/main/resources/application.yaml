@@ -2,10 +2,13 @@ spring:
   application:
     name: financial-reports
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ruslanagaev
+    password: 1978
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
+  jooq:
+    settings:
+      map-record-component-parameter-names: true
