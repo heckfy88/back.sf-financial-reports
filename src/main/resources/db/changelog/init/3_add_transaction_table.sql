@@ -17,7 +17,7 @@ create table finances.transaction
     id               uuid      default uuid_generate_v4(),
     user_id          uuid                        not null,
     category_id      uuid                        not null,
-    datetime         timestamp                   not null,
+    "date"           date                        not null,
     description      text,
     amount           numeric(15, 5)              not null check (amount >= 0),
     status           finances.transaction_status not null,

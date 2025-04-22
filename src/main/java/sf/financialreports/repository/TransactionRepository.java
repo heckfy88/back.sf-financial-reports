@@ -7,6 +7,8 @@ import sf.financialreports.domain.Transaction;
 import sf.financialreports.domain.jooq.enums.TransactionStatus;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class TransactionRepository {
         this.dslContext = dslContext;
     }
 
-    public static List<Field<?>> TRANSACTION_FIELDS = List.of(
+    public static final List<Field<?>> TRANSACTION_FIELDS = List.of(
             TRANSACTION.ID,
             TRANSACTION.USER_ID,
             TRANSACTION.CATEGORY_ID,
@@ -57,7 +59,7 @@ public class TransactionRepository {
                 .values(
                         transaction.userId(),
                         categoryId, // разобраться, как в record transaction передать это - record class doesn't support setters
-                        transaction.datetime(),
+                        LocalDate.parse(transaction.date(), DateTimeFormatter.ofPattern("yyyy.MM.dd")),
                         transaction.description(),
                         transaction.amount(),
                         TransactionStatus.valueOf(transaction.status().name()),
