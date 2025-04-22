@@ -6,6 +6,7 @@ import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.UserDto;
+import sf.financialreports.api.exceptions.TransactionValidationException;
 import sf.financialreports.domain.Category;
 import sf.financialreports.domain.Transaction;
 import sf.financialreports.repository.CategoryRepository;
@@ -38,7 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto save(TransactionDto dto) {
         // TODO: user auth check
-        // TODO: validate fields
+
+        validate(dto);
 
         Category category = categoryRepository.save(Category.from(dto.category()));
 
@@ -47,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
         return TransactionDto.builder()
                 .id(transaction.id())
                 .user(UserDto.from(userRepository.findById(transaction.userId())))
-                .datetime(transaction.datetime())
+                .date(transaction.date())
                 .description(transaction.description())
                 .amount(transaction.amount())
                 .status(TransactionStatusDto.from(transaction.status()))
@@ -65,5 +67,29 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionStatusDto> getStatuses() {
         // TODO: Valyok
         return List.of();
+    }
+
+    private void validate(TransactionDto dto) {
+        checkInn(dto.receiverInn());
+        checkPhone(dto.receiverPhone());
+        checkDate(dto.date());
+    }
+
+    private void checkInn(String receiverInn) {
+        if (!(receiverInn.matches("\\d{11}"))) {
+            throw new TransactionValidationException("Invalid inn number: '" + receiverInn + "' should be 11 digits");
+        }
+    }
+
+    private void checkPhone(String receiverPhone) {
+        if (!receiverPhone.matches("^(?:\\+7|8)?[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2}$")) {
+            throw new TransactionValidationException("Invalid phone number: " + receiverPhone);
+        }
+    }
+
+    private void checkDate(String date) {
+        if (!date.matches("\\d{4}\\.\\d{2}\\.\\d{2}")) {
+            throw new TransactionValidationException("Invalid date: " + date);
+        }
     }
 }

@@ -15,18 +15,15 @@ import sf.financialreports.domain.CategoryType;
 import sf.financialreports.domain.Status;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
-public class TransactionControllerIT extends AbstractIntegrationClass {
+class TransactionControllerIT extends AbstractIntegrationClass {
 
     static {
         postgresContainer.start();
@@ -34,8 +31,8 @@ public class TransactionControllerIT extends AbstractIntegrationClass {
 
     @DisplayName("Успешное создание транзакции")
     @Test
-    public void createTransaction_success() throws Exception {
-        createTransaction(trasactionDto, status().isOk());
+    void createTransaction_success() throws Exception {
+        createTransaction(transactionDto, status().isOk());
     }
 
 
@@ -49,14 +46,13 @@ public class TransactionControllerIT extends AbstractIntegrationClass {
                 .getResponse().getContentAsString();
     }
 
-    private static final TransactionDto trasactionDto = TransactionDto.builder()
-            .id(UUID.randomUUID())
+    private static final TransactionDto transactionDto = TransactionDto.builder()
             .user(
                     UserDto.builder()
                             .id(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                             .build()
             )
-            .datetime(LocalDateTime.now())
+            .date("2021.01.01")
             .description("test")
             .amount(BigDecimal.valueOf(1000))
             .status(TransactionStatusDto.from(Status.CANCELLED))
@@ -64,7 +60,7 @@ public class TransactionControllerIT extends AbstractIntegrationClass {
             .senderAccount("test")
             .receiverBank("test")
             .receiverAccount("test")
-            .receiverInn("test")
+            .receiverInn("12345678901")
             .category(CategoryDto.builder()
                     .id(UUID.randomUUID())
                     .name("test")

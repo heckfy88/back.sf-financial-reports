@@ -5,6 +5,7 @@ package sf.financialreports.domain.jooq.tables;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -73,9 +74,9 @@ public class Transaction extends TableImpl<TransactionRecord> {
     public final TableField<TransactionRecord, UUID> CATEGORY_ID = createField(DSL.name("category_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>finances.transaction.datetime</code>.
+     * The column <code>finances.transaction.date</code>.
      */
-    public final TableField<TransactionRecord, LocalDateTime> DATETIME = createField(DSL.name("datetime"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<TransactionRecord, LocalDate> DATE = createField(DSL.name("date"), SQLDataType.LOCALDATE.nullable(false), this, "");
 
     /**
      * The column <code>finances.transaction.description</code>.
@@ -249,14 +250,14 @@ public class Transaction extends TableImpl<TransactionRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<UUID, UUID, UUID, LocalDateTime, String, BigDecimal, TransactionStatus, String, String, String, String, String, String, LocalDateTime> fieldsRow() {
+    public Row14<UUID, UUID, UUID, LocalDate, String, BigDecimal, TransactionStatus, String, String, String, String, String, String, LocalDateTime> fieldsRow() {
         return (Row14) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function14<? super UUID, ? super UUID, ? super UUID, ? super LocalDateTime, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function14<? super UUID, ? super UUID, ? super UUID, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -264,7 +265,7 @@ public class Transaction extends TableImpl<TransactionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function14<? super UUID, ? super UUID, ? super UUID, ? super LocalDateTime, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function14<? super UUID, ? super UUID, ? super UUID, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }
