@@ -1,6 +1,7 @@
 package sf.financialreports.api.dto;
 
-import sf.financialreports.domain.Status;
+import sf.financialreports.dao.domain.Status;
+
 
 public record TransactionStatusDto(
         String name,

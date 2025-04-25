@@ -1,26 +1,28 @@
 package sf.financialreports.api.dto;
 
 import lombok.Builder;
-import sf.financialreports.domain.User;
-import sf.financialreports.domain.UserType;
+import lombok.Data;
+import sf.financialreports.dao.domain.User;
+import sf.financialreports.dao.domain.UserType;
 
 import java.util.UUID;
 
 @Builder
-public record UserDto(
-        UUID id,
-        String username,
-        String email,
-        String passwordHash,
-        UserType type
-) {
+@Data
+public class UserDto {
+    private UUID id;
+    private String username;
+    private String email;
+    private String passwordHash;
+    private UserType type;
+
     public static UserDto from(User user) {
         return new UserDto(
-                user.id(),
-                user.username(),
-                user.email(),
-                user.passwordHash(),
-                user.type()
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPasswordHash(),
+                user.getType()
         );
     }
 }

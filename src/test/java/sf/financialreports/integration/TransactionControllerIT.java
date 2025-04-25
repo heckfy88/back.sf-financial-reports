@@ -11,8 +11,8 @@ import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.UserDto;
-import sf.financialreports.domain.CategoryType;
-import sf.financialreports.domain.Status;
+import sf.financialreports.dao.domain.CategoryType;
+import sf.financialreports.dao.domain.Status;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -38,6 +38,7 @@ class TransactionControllerIT extends AbstractIntegrationClass {
 
     private String createTransaction(TransactionDto dto, ResultMatcher expectedStatus) throws Exception {
         return mvc.perform(post("/api/v1/transactions")
+                        .header("operUid", UUID.randomUUID().toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
                 ).andExpect(expectedStatus)
