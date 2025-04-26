@@ -16,7 +16,7 @@ public class AdviceController {
 
     @ExceptionHandler({TransactionValidationException.class, TransactionOperationException.class})
     public ResponseEntity<ErrorDto> handleTransactionOperationException(Exception ex, WebRequest request) {
-        // TODO: add integration loggging
+        // TODO: add integration logging
         return ResponseEntity.unprocessableEntity().body(
                 ErrorDto.builder()
                         .message(ex.getMessage())
