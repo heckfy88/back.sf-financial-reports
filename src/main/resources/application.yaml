@@ -9,6 +9,3 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
-  jooq:
-    settings:
-      map-record-component-parameter-names: true

@@ -12,6 +12,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getCategories() {
+        CategoryDto.builder().build();
         return List.of();
     }
 }

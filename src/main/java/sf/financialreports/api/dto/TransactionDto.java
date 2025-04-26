@@ -1,24 +1,30 @@
 package sf.financialreports.api.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Builder
-public record TransactionDto(
-        UUID id,
-        UserDto user,
-        String date,
-        String description,
-        BigDecimal amount,
-        TransactionStatusDto status,
-        String senderBank,
-        String senderAccount,
-        String receiverBank,
-        String receiverAccount,
-        String receiverInn,
-        CategoryDto category,
-        String receiverPhone
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransactionDto {
+    private UUID id;
+    // убрать, когда будет jwt
+    private UserDto user;
+    private String date;
+    private String description;
+    private BigDecimal amount;
+    private TransactionStatusDto status;
+    private String senderBank;
+    private String senderAccount;
+    private String receiverBank;
+    private String receiverAccount;
+    private String receiverInn;
+    private CategoryDto category;
+    private String receiverPhone;
 }

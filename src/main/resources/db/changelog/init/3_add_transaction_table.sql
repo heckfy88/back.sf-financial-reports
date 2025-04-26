@@ -16,7 +16,7 @@ create table finances.transaction
 (
     id               uuid      default uuid_generate_v4(),
     user_id          uuid                        not null,
-    category_id      uuid                        not null,
+    category_name    varchar(100)                not null,
     "date"           date                        not null,
     description      text,
     amount           numeric(15, 5)              not null check (amount >= 0),
@@ -31,5 +31,5 @@ create table finances.transaction
 
     constraint pk_transaction primary key (id),
     constraint fk_user_id foreign key (user_id) references finances.user (id),
-    constraint fk_category_id foreign key (category_id) references finances.category (id)
+    constraint transaction_category_fkey foreign key (user_id, category_name) references finances.category (user_id, name)
 );
