@@ -18,11 +18,14 @@ create table finances.user
 );
 
 insert into finances.user (id, name, email, password_hash, type, created_at, is_active)
-values
-    ('123e4567-e89b-12d3-a456-426614174000', 'John Doe', 'john.doe@example.com', 'hashed_password', 'PHYSICAL', '2022-01-01 12:00:00', true),
-    ('123e4567-e89b-12d3-a456-426614174001', 'Jane Doe', 'jane.doe@example.com', 'hashed_password', 'PHYSICAL', '2022-01-01 12:00:00', true),
-    ('123e4567-e89b-12d3-a456-426614174002', 'John Smith', 'john.smith@example.com', 'hashed_password', 'LEGAL', '2022-01-01 12:00:00', true),
-    ('123e4567-e89b-12d3-a456-426614174003', 'Company Inc.', 'company@example.com', 'hashed_password', 'LEGAL', '2022-01-01 12:00:00', true);
+values ('123e4567-e89b-12d3-a456-426614174000', 'John Doe', 'john.doe@example.com',
+        '$2a$12$/Nvsbyo9zPNow9VtkA5yLufPgQCDQBdongv6cwb3QAZwIl7prYUnu', 'PHYSICAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174001', 'Jane Doe', 'jane.doe@example.com',
+        '$2a$12$hSNGkB5qkK/tJS2Qgyiv9eaTKGHSUs9ZJcg4Aqn7M1ayF8xCmOvDW', 'PHYSICAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174002', 'John Smith', 'john.smith@example.com',
+        '$2a$12$4qxGESYATnYD5kQyJDDU2OpwU9GOvDwgoETaVthsSUIywy4wSX2dK', 'LEGAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174003', 'Company Inc.', 'company@example.com',
+        '$2a$12$CROd88OYK1C1VMg9Bzv./uP4GuUr1NL.qYNPvWv29Xamb.Q8/ga4a', 'LEGAL', '2022-01-01 12:00:00', true);
 
 
 

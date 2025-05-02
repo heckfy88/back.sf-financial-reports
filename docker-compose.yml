@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: financial-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ruslanagaev
+      POSTGRES_PASSWORD: 1978
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  app:
+    image: financial-reports
+    container_name: financial-reports
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: ruslanagaev
+      SPRING_DATASOURCE_PASSWORD: 1978
+      JWT_SECRET: thisisaverylongsecretkeywithenoughlength!!
+      JWT_ISSUER: financial-reports
+    volumes:
+      - ./config/application.yaml:/app/application.yaml:ro
+    networks:
+      - backend
+
+volumes:
+  pg_data:
+
+networks:
+  backend:

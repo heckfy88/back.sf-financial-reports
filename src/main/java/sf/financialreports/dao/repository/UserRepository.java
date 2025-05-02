@@ -44,6 +44,15 @@ public class UserRepository {
                 .fetchOneInto(User.class);
     }
 
+    public User findByEmail(String userEmail) {
+        return dslContext.select(
+                        USER_FIELDS
+                )
+                .from(USER)
+                .where(USER.EMAIL.eq(userEmail))
+                .fetchOneInto(User.class);
+    }
+
     public User update(User user) {
         return dslContext.update(USER)
                 .set(USER.TYPE, UserType.valueOf(user.getType().name()))
