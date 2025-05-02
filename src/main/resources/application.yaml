@@ -2,18 +2,16 @@ spring:
   application:
     name: financial-reports
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:ruslanagaev}
+    password: ${SPRING_DATASOURCE_PASSWORD:1978}
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
 
-
 jwt:
-  secret: ${JWT_SECRET}
-  issuer: ${JWT_ISSUER}
+  secret: ${JWT_SECRET:thisisaverylongsecretkeywithenoughlength!!}
+  issuer: ${JWT_ISSUER:financial-reports}
   expiration: 1 # hour
   key-id: my-hs256-key
-

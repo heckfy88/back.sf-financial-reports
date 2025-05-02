@@ -32,8 +32,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: 1978
       JWT_SECRET: thisisaverylongsecretkeywithenoughlength!!
       JWT_ISSUER: financial-reports
-    volumes:
-      - ./config/application.yaml:/app/application.yaml:ro
     networks:
       - backend
 
