@@ -10,10 +10,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
 
-
 jwt:
   secret: ${JWT_SECRET:thisisaverylongsecretkeywithenoughlength!!}
   issuer: ${JWT_ISSUER:financial-reports}
   expiration: 1 # hour
   key-id: my-hs256-key
-
