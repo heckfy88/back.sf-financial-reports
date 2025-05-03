@@ -37,6 +37,75 @@ class TransactionControllerIT extends AbstractIntegrationClass {
         createTransaction(transactionDto, status().isOk());
     }
 
+    @DisplayName("Создание транзакции с отсутствующими обязательными полями")
+    @Test
+    void createTransaction_missingRequiredFields() throws Exception {
+        TransactionDto invalidDto = TransactionDto.builder()
+                .user(transactionDto.getUser())
+                // date отсутствует
+                .description("test")
+                .amount(BigDecimal.valueOf(1000))
+                .status(transactionDto.getStatus())
+                .senderBank(null) // не может быть null
+                .receiverBank("test")
+                .receiverAccount("test")
+                .receiverInn("12345678901")
+                .category(CategoryDto.builder()
+                        .id(UUID.randomUUID())
+                        .name("test")
+                        .description("test")
+                        .type(CategoryType.EXPENSE)
+                        .build())
+                .receiverPhone("89001001111")
+                .build();
+
+        createTransaction(invalidDto, status().is5xxServerError());
+    }
+
+    @DisplayName("Создание транзакции без токена — ожидается 401 Unauthorized")
+    @Test
+    void createTransaction_unauthorized_noToken() throws Exception {
+        mvc.perform(post("/api/v1/transactions")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(transactionDto)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @DisplayName("Создание транзакции с неверным токеном — ожидается 401 Unauthorized")
+    @Test
+    void createTransaction_unauthorized_invalidToken() throws Exception {
+        mvc.perform(post("/api/v1/transactions")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer invalid_token_123")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(transactionDto)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+
+    @DisplayName("Создание транзакции с неверным форматом даты — ожидается 422 Bad Request")
+    @Test
+    void createTransaction_invalidDateFormat() throws Exception {
+        TransactionDto dtoWithInvalidDate = TransactionDto.builder()
+                .user(transactionDto.getUser())
+                .date("01-01-2021") // Неправильный формат
+                .description("test")
+                .amount(BigDecimal.valueOf(1000))
+                .status(transactionDto.getStatus())
+                .senderBank("test")
+                .senderAccount("test")
+                .receiverBank("test")
+                .receiverAccount("test")
+                .receiverInn("12345678901")
+                .category(transactionDto.getCategory())
+                .receiverPhone("89001001111")
+                .build();
+
+        createTransaction(dtoWithInvalidDate, status().isUnprocessableEntity());
+    }
 
     private String createTransaction(TransactionDto dto, ResultMatcher expectedStatus) throws Exception {
         LoginDto loginDto = new LoginDto(
