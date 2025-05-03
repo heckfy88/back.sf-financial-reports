@@ -26,6 +26,3 @@ values ('123e4567-e89b-12d3-a456-426614174000', 'John Doe', 'john.doe@example.co
         '$2a$12$4qxGESYATnYD5kQyJDDU2OpwU9GOvDwgoETaVthsSUIywy4wSX2dK', 'LEGAL', '2022-01-01 12:00:00', true),
        ('123e4567-e89b-12d3-a456-426614174003', 'Company Inc.', 'company@example.com',
         '$2a$12$CROd88OYK1C1VMg9Bzv./uP4GuUr1NL.qYNPvWv29Xamb.Q8/ga4a', 'LEGAL', '2022-01-01 12:00:00', true);
-
-
-

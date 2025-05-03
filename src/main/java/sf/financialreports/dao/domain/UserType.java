@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum UserType {
-    PHYSICAL_PERSON("Физическое лицо"),
-    LEGAL_ENTITY("Юридическое лицо"),
+    PHYSICAL("Физическое лицо"),
+    LEGAL("Юридическое лицо"),
     ;
 
     private final String name;

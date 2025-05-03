@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sf.financialreports.dao.domain.UserType;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,8 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TransactionDto {
     private UUID id;
-    // убрать, когда будет jwt
-    private UserDto user;
+    private UserType userType;
     private String date;
     private String description;
     private BigDecimal amount;
