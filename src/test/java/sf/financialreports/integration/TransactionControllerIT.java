@@ -10,7 +10,6 @@ import sf.financialreports.AbstractIntegrationClass;
 import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
-import sf.financialreports.api.dto.UserDto;
 import sf.financialreports.api.dto.login.LoginDto;
 import sf.financialreports.api.dto.login.TokenDto;
 import sf.financialreports.dao.domain.CategoryType;
@@ -64,11 +63,6 @@ class TransactionControllerIT extends AbstractIntegrationClass {
     }
 
     private static final TransactionDto transactionDto = TransactionDto.builder()
-            .user(
-                    UserDto.builder()
-                            .id(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
-                            .build()
-            )
             .date("2021.01.01")
             .description("test")
             .amount(BigDecimal.valueOf(1000))

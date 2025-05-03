@@ -28,10 +28,10 @@ public class Transaction {
     private UUID categoryId;
     private String receiverPhone;
 
-    public static Transaction from(TransactionDto dto) {
+    public static Transaction from(TransactionDto dto, UUID userId) {
         return new Transaction(
                 dto.getId(),
-                dto.getUser().getId(),
+                userId,
                 dto.getDate(),
                 dto.getDescription(),
                 dto.getAmount(),

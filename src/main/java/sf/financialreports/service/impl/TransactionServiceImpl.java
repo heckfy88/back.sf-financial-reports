@@ -1,77 +1,51 @@
 package sf.financialreports.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
-import sf.financialreports.api.dto.UserDto;
+import sf.financialreports.api.dto.dashboard.DashboardDto;
+import sf.financialreports.api.dto.dashboard.TransactionFilterDto;
 import sf.financialreports.api.exceptions.NotFoundException;
 import sf.financialreports.api.exceptions.TransactionOperationException;
 import sf.financialreports.api.exceptions.TransactionValidationException;
-import sf.financialreports.dao.domain.Category;
-import sf.financialreports.dao.domain.Status;
-import sf.financialreports.dao.domain.Transaction;
-import sf.financialreports.dao.domain.User;
+import sf.financialreports.dao.domain.*;
 import sf.financialreports.dao.repository.CategoryRepository;
 import sf.financialreports.dao.repository.TransactionRepository;
 import sf.financialreports.dao.repository.UserRepository;
 import sf.financialreports.service.TransactionService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-
-
     private final TransactionRepository transactionRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-
-
-    public TransactionServiceImpl(
-            TransactionRepository transactionRepository,
-            CategoryRepository categoryRepository,
-            UserRepository userRepository
-    ) {
-        this.transactionRepository = transactionRepository;
-        this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
-    }
+    private final AuthenticationServiceImpl authenticationService;
 
     @Transactional
     @Override
     public TransactionDto save(TransactionDto dto) {
-        // TODO: user auth check, убрать userId, когда будет jwt
+        User user = getUserFromToken();
 
         validate(dto);
 
-        Category category = categoryRepository.save(Category.from(dto.getCategory(), dto.getUser().getId()));
+        Category category = categoryRepository.save(Category.from(dto.getCategory(), user.getId()));
+        Transaction transaction = transactionRepository.save(Transaction.from(dto, user.getId()), category.getName());
 
-        Transaction transaction = transactionRepository.save(Transaction.from(dto), category.getName());
-
-        return TransactionDto.builder()
-                .id(transaction.getId())
-                .user(UserDto.from(userRepository.findById(transaction.getUserId())))
-                .date(transaction.getDate())
-                .description(transaction.getDescription())
-                .amount(transaction.getAmount())
-                .status(TransactionStatusDto.from(transaction.getStatus()))
-                .senderBank(transaction.getSenderBank())
-                .senderAccount(transaction.getSenderAccount())
-                .receiverBank(transaction.getReceiverBank())
-                .receiverAccount(transaction.getReceiverAccount())
-                .receiverInn(transaction.getReceiverInn())
-                .category(CategoryDto.from(category))
-                .receiverPhone(transaction.getReceiverPhone())
-                .build();
+        return buildTransactionDto(user, category, transaction);
     }
 
     @Transactional
     @Override
     public TransactionDto update(TransactionDto dto) {
-        // TODO: user auth check
+        User user = getUserFromToken();
 
         Transaction existingTransaction = transactionRepository.findById(dto.getId());
         if (existingTransaction == null) {
@@ -81,35 +55,33 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionOperationException(String.format("Transaction '%s' is not new", dto.getId()));
         }
 
-        if (dto.getUser() != null) {
-            User existingUser = userRepository.findById(dto.getUser().getId());
-            if (existingUser == null) {
-                throw new NotFoundException(String.format("User '%s' ", dto.getUser().getId()));
-            }
-            userRepository.update(User.from(dto.getUser()));
+        if (dto.getUserType() != null) {
+            user.setType(dto.getUserType());
+            userRepository.update(user);
         }
 
+        Category category = null;
         if (dto.getCategory() != null) {
             Category existingCategory = categoryRepository.findById(dto.getCategory().getId());
             if (existingCategory == null) {
-                // TODO: заменить на значение из jwt
-                categoryRepository.save(Category.from(dto.getCategory(), UUID.randomUUID()));
+                category = categoryRepository.save(Category.from(dto.getCategory(), user.getId()));
+            } else {
+                category = categoryRepository.update(Category.from(dto.getCategory(), user.getId()));
             }
-            // TODO: заменить на значение из jwt
-            categoryRepository.update(Category.from(dto.getCategory(), UUID.randomUUID()));
         }
 
         validate(dto);
-        transactionRepository.update(Transaction.from(dto));
+        Transaction transaction = transactionRepository.update(Transaction.from(dto, user.getId()));
 
-        return new TransactionDto();
+        return buildTransactionDto(user, category, transaction);
+
     }
 
     @Transactional
     @Override
     public void delete(UUID id) {
         Transaction transaction = transactionRepository.findById(id);
-        // TODO: user auth check
+
         if (transaction == null) {
             throw new NotFoundException(String.format("Transaction '%s' ", id));
         }
@@ -118,6 +90,12 @@ public class TransactionServiceImpl implements TransactionService {
         }
         transaction.setStatus(Status.DELETED);
         transactionRepository.update(transaction);
+    }
+
+    @Override
+    public DashboardDto getDashboard(TransactionFilterDto dto) {
+        transactionRepository.getDashboard(UUID.randomUUID(), TransactionFilter.from(dto));
+        return new DashboardDto();
     }
 
     @Override
@@ -150,5 +128,28 @@ public class TransactionServiceImpl implements TransactionService {
         if (!date.matches("\\d{4}\\.\\d{2}\\.\\d{2}")) {
             throw new TransactionValidationException(String.format("Invalid date: %s", date));
         }
+    }
+
+    private TransactionDto buildTransactionDto(User user, Category category, Transaction transaction) {
+        return TransactionDto.builder()
+                .id(transaction.getId())
+                .userType(user.getType())
+                .date(transaction.getDate())
+                .description(transaction.getDescription())
+                .amount(transaction.getAmount())
+                .status(TransactionStatusDto.from(transaction.getStatus()))
+                .senderBank(transaction.getSenderBank())
+                .senderAccount(transaction.getSenderAccount())
+                .receiverBank(transaction.getReceiverBank())
+                .receiverAccount(transaction.getReceiverAccount())
+                .receiverInn(transaction.getReceiverInn())
+                .category(CategoryDto.from(category))
+                .receiverPhone(transaction.getReceiverPhone())
+                .build();
+    }
+
+    private User getUserFromToken() {
+        Map<String, Object> claims = authenticationService.getToken().getClaims();
+        return userRepository.findById(UUID.fromString(claims.get("sub").toString()));
     }
 }

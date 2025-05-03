@@ -31,39 +31,59 @@ public class UserRepository {
     );
 
     public User findById(UUID userId) {
-        return dslContext.select(
-                        USER.ID,
-                        USER.NAME,
-                        USER.EMAIL,
-                        USER.TYPE,
-                        USER.CREATED_AT,
-                        USER.IS_ACTIVE
-                )
+        var userRecord = dslContext.select(USER_FIELDS)
                 .from(USER)
                 .where(USER.ID.eq(userId))
-                .fetchOneInto(User.class);
+                .fetchOne();
+
+        if (userRecord == null) return null;
+
+        return new User(
+                userRecord.get(USER.ID),
+                userRecord.get(USER.NAME),
+                userRecord.get(USER.EMAIL),
+                userRecord.get(USER.PASSWORD_HASH),
+                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
+        );
     }
 
     public User findByEmail(String userEmail) {
-        return dslContext.select(
-                        USER_FIELDS
-                )
+        var userRecord = dslContext.select(USER_FIELDS)
                 .from(USER)
                 .where(USER.EMAIL.eq(userEmail))
-                .fetchOneInto(User.class);
+                .fetchOne();
+
+        if (userRecord == null) return null;
+
+        return new User(
+                userRecord.get(USER.ID),
+                userRecord.get(USER.NAME),
+                userRecord.get(USER.EMAIL),
+                userRecord.get(USER.PASSWORD_HASH),
+                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
+        );
     }
 
     public User update(User user) {
-        return dslContext.update(USER)
+        var userRecord = dslContext.update(USER)
                 .set(USER.TYPE, UserType.valueOf(user.getType().name()))
                 .where(USER.ID.eq(user.getId()))
                 .returning(
                         USER.ID,
                         USER.NAME,
                         USER.EMAIL,
-                        USER.TYPE,
-                        USER.CREATED_AT,
-                        USER.IS_ACTIVE)
-                .fetchSingleInto(User.class);
+                        USER.TYPE
+                )
+                .fetchOne();
+
+        if (userRecord == null) return null;
+
+        return new User(
+                userRecord.get(USER.ID),
+                userRecord.get(USER.NAME),
+                userRecord.get(USER.EMAIL),
+                userRecord.get(USER.PASSWORD_HASH),
+                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
+        );
     }
 }

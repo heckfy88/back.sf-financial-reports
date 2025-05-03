@@ -4,13 +4,19 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.springframework.stereotype.Repository;
 import sf.financialreports.dao.domain.Transaction;
+import sf.financialreports.dao.domain.TransactionFilter;
+import sf.financialreports.dao.domain.dashboard.Dashboard;
+import sf.financialreports.dao.domain.dashboard.TimeGroupStat;
+import sf.financialreports.dao.jooq.enums.CategoryType;
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static sf.financialreports.dao.jooq.tables.Category.CATEGORY;
 import static sf.financialreports.dao.jooq.tables.Transaction.TRANSACTION;
 
 
@@ -94,5 +100,95 @@ public class TransactionRepository {
                 .from(TRANSACTION)
                 .where(TRANSACTION.ID.eq(id))
                 .fetchOneInto(Transaction.class);
+    }
+
+    public Dashboard getDashboard(UUID userId, TransactionFilter filter) {
+        var t = TRANSACTION.as("t");
+        var c = CATEGORY.as("c");
+
+        // базовый запрос с join
+        var condition = t.USER_ID.eq(userId)
+                .and(t.CATEGORY_NAME.eq(c.NAME))
+                .and(c.USER_ID.eq(userId));
+
+        // применим фильтры
+        if (filter.getSenderBank() != null)
+            condition = condition.and(t.SENDER_BANK.eq(filter.getSenderBank()));
+
+        if (filter.getReceiverBank() != null)
+            condition = condition.and(t.RECEIVER_BANK.eq(filter.getReceiverBank()));
+
+        if (filter.getStatus() != null)
+            condition = condition.and(t.STATUS.eq(TransactionStatus.valueOf(filter.getStatus())));
+
+        if (filter.getInn() != null)
+            condition = condition.and(t.RECEIVER_INN.eq(filter.getInn()));
+
+        if (filter.getSpecificDate() != null)
+            condition = condition.and(t.DATE.eq(filter.getSpecificDate()));
+        else {
+            if (filter.getDateFrom() != null)
+                condition = condition.and(t.DATE.ge(filter.getDateFrom()));
+            if (filter.getDateTo() != null)
+                condition = condition.and(t.DATE.le(filter.getDateTo()));
+        }
+
+        if (filter.getAmountFrom() != null)
+            condition = condition.and(t.AMOUNT.ge(filter.getAmountFrom()));
+        if (filter.getAmountTo() != null)
+            condition = condition.and(t.AMOUNT.le(filter.getAmountTo()));
+
+        if (filter.getCategoryName() != null)
+            condition = condition.and(t.CATEGORY_NAME.eq(filter.getCategoryName()));
+        if (filter.getCategoryType() != null)
+            condition = condition.and(c.TYPE.eq(CategoryType.valueOf(filter.getCategoryType())));
+
+        // Выполняем запрос
+        List<Transaction> transactions = dslContext
+                .select(t.asterisk(), c.TYPE)
+                .from(t)
+                .join(c).on(c.USER_ID.eq(t.USER_ID).and(c.NAME.eq(t.CATEGORY_NAME)))
+                .where(condition)
+                .fetchInto(Transaction.class);
+
+        // Обработка
+        return aggregateDashboard(transactions);
+    }
+
+    private Dashboard aggregateDashboard(List<Transaction> transactions) {
+        Dashboard result = new Dashboard();
+
+        return result;
+    }
+
+    private Map<String, List<TimeGroupStat>> aggregateTimeGroups(List<Transaction> transactions) {
+        DateTimeFormatter weeklyFmt = DateTimeFormatter.ofPattern("YYYY-'W'ww");
+        DateTimeFormatter monthlyFmt = DateTimeFormatter.ofPattern("yyyy-MM");
+        DateTimeFormatter yearlyFmt = DateTimeFormatter.ofPattern("yyyy");
+
+        Function<Transaction, LocalDate> toDate = t -> LocalDate.parse(t.getDate());
+
+        Map<String, List<TimeGroupStat>> result = new HashMap<>();
+
+        result.put("weekly", groupAndCount(transactions, t -> toDate.apply(t).format(weeklyFmt)));
+        result.put("monthly", groupAndCount(transactions, t -> toDate.apply(t).format(monthlyFmt)));
+        result.put("quarterly", groupAndCount(transactions, t -> formatQuarter(toDate.apply(t))));
+        result.put("yearly", groupAndCount(transactions, t -> toDate.apply(t).format(yearlyFmt)));
+
+        return result;
+    }
+
+    private List<TimeGroupStat> groupAndCount(List<Transaction> transactions, Function<Transaction, String> classifier) {
+        return transactions.stream()
+                .collect(Collectors.groupingBy(classifier, Collectors.counting()))
+                .entrySet().stream()
+                .map(e -> new TimeGroupStat(e.getKey(), e.getValue()))
+                .sorted(Comparator.comparing(TimeGroupStat::getPeriod))
+                .collect(Collectors.toList());
+    }
+
+    private String formatQuarter(LocalDate date) {
+        int q = (date.getMonthValue() - 1) / 3 + 1;
+        return date.getYear() + "-Q" + q;
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
+import sf.financialreports.api.dto.dashboard.DashboardDto;
+import sf.financialreports.api.dto.dashboard.TransactionFilterDto;
 import sf.financialreports.service.TransactionService;
 
 import java.util.List;
@@ -19,13 +21,20 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-
     @PostMapping()
     public TransactionDto save(
             @RequestHeader("operUid") UUID operUid,
             @RequestBody TransactionDto dto
     ) {
         return transactionService.save(dto);
+    }
+
+    @PostMapping("/dashboard")
+    public DashboardDto getDashboard(
+            @RequestHeader("operUid") UUID operUid,
+            @RequestBody TransactionFilterDto dto
+    ) {
+        return transactionService.getDashboard(dto);
     }
 
     @PatchMapping("")
