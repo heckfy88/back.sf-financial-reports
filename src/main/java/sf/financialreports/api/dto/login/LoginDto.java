@@ -1,4 +1,4 @@
-package sf.financialreports.api.dto;
+package sf.financialreports.api.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRqDto {
+public class LoginDto {
     private String email;
     private String password;
 }

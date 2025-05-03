@@ -11,6 +11,8 @@ import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.UserDto;
+import sf.financialreports.api.dto.login.LoginDto;
+import sf.financialreports.api.dto.login.TokenDto;
 import sf.financialreports.dao.domain.CategoryType;
 import sf.financialreports.dao.domain.Status;
 
@@ -37,8 +39,22 @@ class TransactionControllerIT extends AbstractIntegrationClass {
 
 
     private String createTransaction(TransactionDto dto, ResultMatcher expectedStatus) throws Exception {
+        LoginDto loginDto = new LoginDto(
+                "john.doe@example.com",
+                "passwordA"
+        );
+
+        String token = mvc.perform(post("/api/auth/login")
+                        .content(mapper.writeValueAsString(loginDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TokenDto tokenDto = mapper.readValue(token, TokenDto.class);
+
         return mvc.perform(post("/api/v1/transactions")
                         .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer " + tokenDto.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
                 ).andExpect(expectedStatus)
