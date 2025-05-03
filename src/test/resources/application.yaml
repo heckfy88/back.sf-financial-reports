@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: finances
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+jwt:
+  secret: ${JWT_SECRET:thisisaverylongsecretkeywithenoughlength!!}
+  issuer: ${JWT_ISSUER:financial-reports}
+  expiration: 10000 # hour
+  key-id: my-hs256-key

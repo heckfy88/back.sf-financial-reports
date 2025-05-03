@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
-import sf.financialreports.api.dto.LoginRqDto;
+import sf.financialreports.api.dto.login.LoginDto;
 import sf.financialreports.config.security.JwtProperties;
 import sf.financialreports.service.AuthenticationService;
 
@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     @Override
-    public String login(LoginRqDto loginDto) {
+    public String login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getEmail(),

@@ -1,6 +1,7 @@
 package sf.financialreports.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -15,6 +16,8 @@ import java.util.Map;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Override
     public void commence(HttpServletRequest request,
@@ -31,7 +34,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         body.put("message", authException.getMessage());
         body.put("path", request.getRequestURI());
 
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        objectMapper.writeValue(response.getOutputStream(), body);
     }
 }
 
