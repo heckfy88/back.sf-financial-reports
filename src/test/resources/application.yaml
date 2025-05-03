@@ -14,3 +14,5 @@ jwt:
   issuer: ${JWT_ISSUER:financial-reports}
   expiration: 10000 # hour
   key-id: my-hs256-key
+
+allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
