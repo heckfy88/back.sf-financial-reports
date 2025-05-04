@@ -13,8 +13,8 @@ import sf.financialreports.api.dto.login.TokenDto;
 
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,22 +32,51 @@ class TransactionStatusControllerIT extends AbstractIntegrationClass {
         getStatus(dto, status().is2xxSuccessful());
     }
 
-    private String getStatus(TransactionStatusDto dto, ResultMatcher expectedStatus) throws Exception {
-        LoginDto loginDto = new LoginDto(
-                "john.doe@example.com",
-                "passwordA"
-        );
+    @DisplayName("Получение статуса транзакции без токена — ожидается 401 Unauthorized")
+    @Test
+    void getTransactionStatus_unauthorized_noToken() throws Exception {
+        String token = loginAndGetToken();
 
-        String token = mvc.perform(post("/api/auth/login")
+        mvc.perform(delete("/api/v1/transactions/statuses")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer ")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @DisplayName("Создание транзакции с неверным токеном — ожидается 401 Unauthorized")
+    @Test
+    void getTransactionStatus_unauthorized_invalidToken() throws Exception {
+        String token = loginAndGetToken();
+
+        mvc.perform(delete("/api/v1/transactions/statuses")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer invalid_token_123")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    private String loginAndGetToken() throws Exception {
+        LoginDto loginDto = new LoginDto("john.doe@example.com", "passwordA");
+
+        String response = mvc.perform(post("/api/auth/login")
                         .content(mapper.writeValueAsString(loginDto))
-                        .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-        TokenDto tokenDto = mapper.readValue(token, TokenDto.class);
+        TokenDto tokenDto = mapper.readValue(response, TokenDto.class);
+        return tokenDto.getToken();
+    }
+
+
+    private String getStatus(TransactionStatusDto dto, ResultMatcher expectedStatus) throws Exception {
+        String token = loginAndGetToken();
         return mvc.perform(get("/api/v1/transactions/statuses")
                         .header("operUid", UUID.randomUUID().toString())
-                        .header("Authorization", "Bearer " + tokenDto.getToken())
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
                 ).andExpect(expectedStatus)
