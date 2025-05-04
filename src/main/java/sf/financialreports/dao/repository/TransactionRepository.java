@@ -7,7 +7,6 @@ import sf.financialreports.dao.domain.Transaction;
 import sf.financialreports.dao.domain.TransactionFilter;
 import sf.financialreports.dao.domain.dashboard.Dashboard;
 import sf.financialreports.dao.domain.dashboard.TimeGroupStat;
-import sf.financialreports.dao.jooq.enums.CategoryType;
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 
 import java.time.LocalDate;
@@ -79,6 +78,13 @@ public class TransactionRepository {
                 .fetchSingleInto(Transaction.class);
     }
 
+    public List<Transaction> getTransactions(UUID userId) {
+        return dslContext.select(TRANSACTION_FIELDS)
+                .from(TRANSACTION)
+                .where(TRANSACTION.USER_ID.eq(userId))
+                .fetchInto(Transaction.class);
+    }
+
     public Transaction update(Transaction transaction) {
         return dslContext.update(TRANSACTION)
                 .set(TRANSACTION.DATE, LocalDate.parse(transaction.getDate(), DateTimeFormatter.ofPattern("yyyy.MM.dd")))
@@ -113,13 +119,13 @@ public class TransactionRepository {
 
         // применим фильтры
         if (filter.getSenderBank() != null)
-            condition = condition.and(t.SENDER_BANK.eq(filter.getSenderBank()));
+            condition = condition.and(t.SENDER_BANK.in(filter.getSenderBank()));
 
         if (filter.getReceiverBank() != null)
-            condition = condition.and(t.RECEIVER_BANK.eq(filter.getReceiverBank()));
+            condition = condition.and(t.RECEIVER_BANK.in(filter.getReceiverBank()));
 
-        if (filter.getStatus() != null)
-            condition = condition.and(t.STATUS.eq(TransactionStatus.valueOf(filter.getStatus())));
+/*        if (filter.getStatus() != null)
+            condition = condition.and(t.STATUS.in(TransactionStatus.valueOf(filter.getStatus())));*/
 
         if (filter.getInn() != null)
             condition = condition.and(t.RECEIVER_INN.eq(filter.getInn()));
@@ -140,8 +146,8 @@ public class TransactionRepository {
 
         if (filter.getCategoryName() != null)
             condition = condition.and(t.CATEGORY_NAME.eq(filter.getCategoryName()));
-        if (filter.getCategoryType() != null)
-            condition = condition.and(c.TYPE.eq(CategoryType.valueOf(filter.getCategoryType())));
+/*        if (filter.getCategoryType() != null)
+            condition = condition.and(c.TYPE.eq(CategoryType.valueOf(filter.getCategoryType())));*/
 
         // Выполняем запрос
         List<Transaction> transactions = dslContext

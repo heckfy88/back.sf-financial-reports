@@ -30,7 +30,7 @@ public class CategoryRepository {
     );
 
     public Category save(Category category) {
-        Category existingCategory = findById(category.getId());
+        Category existingCategory = findByNameAndUserId(category.getName(), category.getUserId());
         if (existingCategory != null) {
             return existingCategory;
         }
@@ -60,12 +60,12 @@ public class CategoryRepository {
                 .fetchOneInto(Category.class);
     }
 
-    public boolean isExistingCategory(UUID id) {
-        return dslContext.fetchExists(
-                dslContext.selectOne()
-                        .from(CATEGORY)
-                        .where(CATEGORY.ID.eq(id))
-        );
+    public Category findByNameAndUserId(String categoryName, UUID userId) {
+        return dslContext.select(CATEGORY_FIELDS)
+                .from(CATEGORY)
+                .where(CATEGORY.NAME.eq(categoryName))
+                .and(CATEGORY.USER_ID.eq(userId))
+                .fetchOneInto(Category.class);
     }
 
     public Category update(Category category) {
