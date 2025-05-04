@@ -62,7 +62,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         Category category = null;
         if (dto.getCategory() != null) {
-            Category existingCategory = categoryRepository.findById(dto.getCategory().getId());
+            Category existingCategory =
+                    categoryRepository.findByNameAndUserId(dto.getCategory().getName(), user.getId());
             if (existingCategory == null) {
                 category = categoryRepository.save(Category.from(dto.getCategory(), user.getId()));
             } else {
@@ -96,6 +97,29 @@ public class TransactionServiceImpl implements TransactionService {
     public DashboardDto getDashboard(TransactionFilterDto dto) {
         transactionRepository.getDashboard(UUID.randomUUID(), TransactionFilter.from(dto));
         return new DashboardDto();
+    }
+
+    @Override
+    public List<TransactionDto> getTransactions() {
+        User user = getUserFromToken();
+        return transactionRepository.getTransactions(user.getId()).stream().map(transaction ->
+                TransactionDto.builder()
+                        .id(transaction.getId())
+                        .userType(userRepository.findById(transaction.getUserId()).getType())
+                        .date(transaction.getDate())
+                        .description(transaction.getDescription())
+                        .amount(transaction.getAmount())
+                        .status(TransactionStatusDto.from(transaction.getStatus()))
+                        .senderBank(transaction.getSenderBank())
+                        .senderAccount(transaction.getSenderAccount())
+                        .receiverBank(transaction.getReceiverBank())
+                        .receiverAccount(transaction.getReceiverAccount())
+                        .receiverInn(transaction.getReceiverInn())
+                        .category(CategoryDto.from(
+                                categoryRepository.findByNameAndUserId(transaction.getCategoryName(), user.getId())))
+                        .receiverPhone(transaction.getReceiverPhone())
+                        .build()
+        ).toList();
     }
 
     @Override

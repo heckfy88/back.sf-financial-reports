@@ -16,5 +16,7 @@ public interface TransactionService {
 
     DashboardDto getDashboard(TransactionFilterDto dto);
 
+    List<TransactionDto> getTransactions();
+
     List<TransactionStatusDto> getStatuses();
 }

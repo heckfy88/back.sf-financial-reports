@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.ResultMatcher;
 import sf.financialreports.AbstractIntegrationClass;
@@ -18,6 +19,8 @@ import sf.financialreports.dao.domain.Status;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +37,13 @@ class TransactionControllerIT extends AbstractIntegrationClass {
     @Test
     void createTransaction_success() throws Exception {
         createTransaction(transactionDto, status().isOk());
+    }
+
+    @DisplayName("Успешное получение транзакций")
+    @Sql("/sql/get_transactions.sql")
+    @Test
+    void getTransactions_success() throws Exception {
+        getTransactions(status().isOk());
     }
 
 
@@ -56,6 +66,31 @@ class TransactionControllerIT extends AbstractIntegrationClass {
                         .header("Authorization", "Bearer " + tokenDto.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
+                ).andExpect(expectedStatus)
+                .andDo(print())
+                .andReturn()
+                .getResponse().getContentAsString();
+    }
+
+    private String getTransactions(ResultMatcher expectedStatus) throws Exception {
+        LoginDto loginDto = new LoginDto(
+                "john.doe@example.com",
+                "passwordA"
+        );
+
+        String token = mvc.perform(post("/api/auth/login")
+                        .with(csrf())
+                        .content(mapper.writeValueAsString(loginDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TokenDto tokenDto = mapper.readValue(token, TokenDto.class);
+
+        return mvc.perform(get("/api/v1/transactions")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer " + tokenDto.getToken())
+                        .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(expectedStatus)
                 .andDo(print())
                 .andReturn()

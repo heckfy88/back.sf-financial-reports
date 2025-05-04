@@ -29,6 +29,13 @@ public class TransactionController {
         return transactionService.save(dto);
     }
 
+    @GetMapping()
+    public List<TransactionDto> getTransactions(
+            @RequestHeader("operUid") UUID operUid
+    ) {
+        return transactionService.getTransactions();
+    }
+
     @PostMapping("/dashboard")
     public DashboardDto getDashboard(
             @RequestHeader("operUid") UUID operUid,

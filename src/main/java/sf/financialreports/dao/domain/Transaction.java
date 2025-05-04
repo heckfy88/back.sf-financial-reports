@@ -16,6 +16,7 @@ import java.util.UUID;
 public class Transaction {
     private UUID id;
     private UUID userId;
+    private String categoryName;
     private String date;
     private String description;
     private BigDecimal amount;
@@ -25,13 +26,13 @@ public class Transaction {
     private String receiverBank;
     private String receiverAccount;
     private String receiverInn;
-    private UUID categoryId;
     private String receiverPhone;
 
     public static Transaction from(TransactionDto dto, UUID userId) {
         return new Transaction(
                 dto.getId(),
                 userId,
+                dto.getCategory().getName(),
                 dto.getDate(),
                 dto.getDescription(),
                 dto.getAmount(),
@@ -41,7 +42,6 @@ public class Transaction {
                 dto.getReceiverBank(),
                 dto.getReceiverAccount(),
                 dto.getReceiverInn(),
-                dto.getCategory().getId(),
                 dto.getReceiverPhone()
         );
     }
