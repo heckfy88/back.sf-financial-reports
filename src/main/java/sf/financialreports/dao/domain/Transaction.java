@@ -23,6 +23,7 @@ public class Transaction {
     private Status status;
     private String senderBank;
     private String senderAccount;
+    private UserType receiverUserType;
     private String receiverBank;
     private String receiverAccount;
     private String receiverInn;
@@ -39,6 +40,7 @@ public class Transaction {
                 Status.valueOf(dto.getStatus().name()),
                 dto.getSenderBank(),
                 dto.getSenderAccount(),
+                dto.getReceiverUserType(),
                 dto.getReceiverBank(),
                 dto.getReceiverAccount(),
                 dto.getReceiverInn(),

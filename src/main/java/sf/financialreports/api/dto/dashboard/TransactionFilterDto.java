@@ -19,6 +19,6 @@ public class TransactionFilterDto {
     private LocalDate specificDate;
     private BigDecimal amountFrom;
     private BigDecimal amountTo;
-    private List<String> categoryType; // INCOME or EXPENSE
-    private String categoryName;
+    private String categoryType; // INCOME or EXPENSE
+    private List<String> categoryName;
 }

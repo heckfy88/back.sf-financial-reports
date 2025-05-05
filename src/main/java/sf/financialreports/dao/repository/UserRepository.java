@@ -4,7 +4,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.springframework.stereotype.Repository;
 import sf.financialreports.dao.domain.User;
-import sf.financialreports.dao.jooq.enums.UserType;
+import sf.financialreports.dao.domain.UserType;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class UserRepository {
                 userRecord.get(USER.NAME),
                 userRecord.get(USER.EMAIL),
                 userRecord.get(USER.PASSWORD_HASH),
-                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
+                UserType.fromDb(userRecord.get(USER.TYPE))
         );
     }
 
@@ -60,30 +60,7 @@ public class UserRepository {
                 userRecord.get(USER.NAME),
                 userRecord.get(USER.EMAIL),
                 userRecord.get(USER.PASSWORD_HASH),
-                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
-        );
-    }
-
-    public User update(User user) {
-        var userRecord = dslContext.update(USER)
-                .set(USER.TYPE, UserType.valueOf(user.getType().name()))
-                .where(USER.ID.eq(user.getId()))
-                .returning(
-                        USER.ID,
-                        USER.NAME,
-                        USER.EMAIL,
-                        USER.TYPE
-                )
-                .fetchOne();
-
-        if (userRecord == null) return null;
-
-        return new User(
-                userRecord.get(USER.ID),
-                userRecord.get(USER.NAME),
-                userRecord.get(USER.EMAIL),
-                userRecord.get(USER.PASSWORD_HASH),
-                sf.financialreports.dao.domain.UserType.valueOf(userRecord.get(USER.TYPE).name())
+                UserType.fromDb(userRecord.get(USER.TYPE))
         );
     }
 }

@@ -39,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
         Category category = categoryRepository.save(Category.from(dto.getCategory(), user.getId()));
         Transaction transaction = transactionRepository.save(Transaction.from(dto, user.getId()), category.getName());
 
-        return buildTransactionDto(user, category, transaction);
+        return buildTransactionDto(category, transaction);
     }
 
     @Transactional
@@ -55,11 +55,6 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionOperationException(String.format("Transaction '%s' is not new", dto.getId()));
         }
 
-        if (dto.getUserType() != null) {
-            user.setType(dto.getUserType());
-            userRepository.update(user);
-        }
-
         Category category = null;
         if (dto.getCategory() != null) {
             Category existingCategory =
@@ -72,9 +67,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         validate(dto);
-        Transaction transaction = transactionRepository.update(Transaction.from(dto, user.getId()));
 
-        return buildTransactionDto(user, category, transaction);
+        Transaction transaction = transactionRepository.update(Transaction.from(dto, user.getId()));
+        return buildTransactionDto(category, transaction);
 
     }
 
@@ -105,13 +100,13 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getTransactions(user.getId()).stream().map(transaction ->
                 TransactionDto.builder()
                         .id(transaction.getId())
-                        .userType(userRepository.findById(transaction.getUserId()).getType())
                         .date(transaction.getDate())
                         .description(transaction.getDescription())
                         .amount(transaction.getAmount())
                         .status(TransactionStatusDto.from(transaction.getStatus()))
                         .senderBank(transaction.getSenderBank())
                         .senderAccount(transaction.getSenderAccount())
+                        .receiverUserType(transaction.getReceiverUserType())
                         .receiverBank(transaction.getReceiverBank())
                         .receiverAccount(transaction.getReceiverAccount())
                         .receiverInn(transaction.getReceiverInn())
@@ -154,16 +149,16 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private TransactionDto buildTransactionDto(User user, Category category, Transaction transaction) {
+    private TransactionDto buildTransactionDto(Category category, Transaction transaction) {
         return TransactionDto.builder()
                 .id(transaction.getId())
-                .userType(user.getType())
                 .date(transaction.getDate())
                 .description(transaction.getDescription())
                 .amount(transaction.getAmount())
                 .status(TransactionStatusDto.from(transaction.getStatus()))
                 .senderBank(transaction.getSenderBank())
                 .senderAccount(transaction.getSenderAccount())
+                .receiverUserType(transaction.getReceiverUserType())
                 .receiverBank(transaction.getReceiverBank())
                 .receiverAccount(transaction.getReceiverAccount())
                 .receiverInn(transaction.getReceiverInn())

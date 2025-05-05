@@ -5,6 +5,7 @@ import org.jooq.Field;
 import org.springframework.stereotype.Repository;
 import sf.financialreports.dao.domain.Transaction;
 import sf.financialreports.dao.domain.TransactionFilter;
+import sf.financialreports.dao.domain.UserType;
 import sf.financialreports.dao.domain.dashboard.Dashboard;
 import sf.financialreports.dao.domain.dashboard.TimeGroupStat;
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
@@ -38,6 +39,7 @@ public class TransactionRepository {
             TRANSACTION.STATUS,
             TRANSACTION.SENDER_BANK,
             TRANSACTION.SENDER_ACCOUNT,
+            TRANSACTION.RECEIVER_USER_TYPE,
             TRANSACTION.RECEIVER_BANK,
             TRANSACTION.RECEIVER_ACCOUNT,
             TRANSACTION.RECEIVER_INN,
@@ -55,6 +57,7 @@ public class TransactionRepository {
                         TRANSACTION.STATUS,
                         TRANSACTION.SENDER_BANK,
                         TRANSACTION.SENDER_ACCOUNT,
+                        TRANSACTION.RECEIVER_USER_TYPE,
                         TRANSACTION.RECEIVER_BANK,
                         TRANSACTION.RECEIVER_ACCOUNT,
                         TRANSACTION.RECEIVER_INN,
@@ -69,6 +72,7 @@ public class TransactionRepository {
                         TransactionStatus.valueOf(transaction.getStatus().name()),
                         transaction.getSenderBank(),
                         transaction.getSenderAccount(),
+                        UserType.fromDomain(transaction.getReceiverUserType()),
                         transaction.getReceiverBank(),
                         transaction.getReceiverAccount(),
                         transaction.getReceiverInn(),
@@ -92,6 +96,7 @@ public class TransactionRepository {
                 .set(TRANSACTION.AMOUNT, transaction.getAmount())
                 .set(TRANSACTION.STATUS, TransactionStatus.valueOf(transaction.getStatus().name()))
                 .set(TRANSACTION.SENDER_BANK, transaction.getSenderBank())
+                .set(TRANSACTION.RECEIVER_USER_TYPE, UserType.fromDomain(transaction.getReceiverUserType()))
                 .set(TRANSACTION.RECEIVER_BANK, transaction.getReceiverBank())
                 .set(TRANSACTION.RECEIVER_INN, transaction.getReceiverInn())
                 .set(TRANSACTION.RECEIVER_PHONE, transaction.getReceiverPhone())
@@ -145,7 +150,7 @@ public class TransactionRepository {
             condition = condition.and(t.AMOUNT.le(filter.getAmountTo()));
 
         if (filter.getCategoryName() != null)
-            condition = condition.and(t.CATEGORY_NAME.eq(filter.getCategoryName()));
+            condition = condition.and(t.CATEGORY_NAME.in(filter.getCategoryName()));
 /*        if (filter.getCategoryType() != null)
             condition = condition.and(c.TYPE.eq(CategoryType.valueOf(filter.getCategoryType())));*/
 

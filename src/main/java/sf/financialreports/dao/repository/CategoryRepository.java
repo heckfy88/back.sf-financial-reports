@@ -53,13 +53,6 @@ public class CategoryRepository {
 
     }
 
-    public Category findById(UUID id) {
-        return dslContext.select(CATEGORY_FIELDS)
-                .from(CATEGORY)
-                .where(CATEGORY.ID.eq(id))
-                .fetchOneInto(Category.class);
-    }
-
     public Category findByNameAndUserId(String categoryName, UUID userId) {
         return dslContext.select(CATEGORY_FIELDS)
                 .from(CATEGORY)

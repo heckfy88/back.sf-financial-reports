@@ -15,12 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TransactionDto {
     private UUID id;
-    private UserType userType;
     private String date;
     private String description;
     private BigDecimal amount;
     private TransactionStatusDto status;
     private String senderBank;
+    private UserType receiverUserType;
     private String senderAccount;
     private String receiverBank;
     private String receiverAccount;

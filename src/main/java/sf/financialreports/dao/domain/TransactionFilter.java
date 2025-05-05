@@ -20,8 +20,8 @@ public class TransactionFilter {
     private LocalDate specificDate;
     private BigDecimal amountFrom;
     private BigDecimal amountTo;
-    private List<String> categoryType; // INCOME or EXPENSE
-    private String categoryName;
+    private String categoryType; // INCOME or EXPENSE
+    private List<String> categoryName;
 
     public static TransactionFilter from(TransactionFilterDto dto) {
         return new TransactionFilter(
