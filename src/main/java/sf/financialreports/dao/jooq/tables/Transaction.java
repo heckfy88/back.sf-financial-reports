@@ -4,6 +4,19 @@
 package sf.financialreports.dao.jooq.tables;
 
 
+import org.jooq.*;
+import org.jooq.Record;
+import org.jooq.User;
+import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
+import sf.financialreports.dao.jooq.Finances;
+import sf.financialreports.dao.jooq.Keys;
+import sf.financialreports.dao.jooq.enums.TransactionStatus;
+import sf.financialreports.dao.jooq.enums.UserType;
+import sf.financialreports.dao.jooq.tables.records.TransactionRecord;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,30 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-
-import org.jooq.Check;
-import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.Function14;
-import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Row14;
-import org.jooq.Schema;
-import org.jooq.SelectField;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
-import org.jooq.impl.DSL;
-import org.jooq.impl.Internal;
-import org.jooq.impl.SQLDataType;
-import org.jooq.impl.TableImpl;
-
-import sf.financialreports.dao.jooq.Finances;
-import sf.financialreports.dao.jooq.Keys;
-import sf.financialreports.dao.jooq.enums.TransactionStatus;
-import sf.financialreports.dao.jooq.tables.records.TransactionRecord;
 
 
 /**
@@ -102,6 +91,11 @@ public class Transaction extends TableImpl<TransactionRecord> {
      * The column <code>finances.transaction.sender_account</code>.
      */
     public final TableField<TransactionRecord, String> SENDER_ACCOUNT = createField(DSL.name("sender_account"), SQLDataType.VARCHAR(30), this, "");
+
+    /**
+     * The column <code>finances.transaction.receiver_user_type</code>.
+     */
+    public final TableField<TransactionRecord, UserType> RECEIVER_USER_TYPE = createField(DSL.name("receiver_user_type"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(sf.financialreports.dao.jooq.enums.UserType.class), this, "");
 
     /**
      * The column <code>finances.transaction.receiver_bank</code>.
@@ -246,18 +240,18 @@ public class Transaction extends TableImpl<TransactionRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row14 type methods
+    // Row15 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, String, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row14) super.fieldsRow();
+    public Row15<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, UserType, String, String, String, String, LocalDateTime> fieldsRow() {
+        return (Row15) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function14<? super UUID, ? super UUID, ? super String, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function15<? super UUID, ? super UUID, ? super String, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super UserType, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -265,7 +259,7 @@ public class Transaction extends TableImpl<TransactionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function14<? super UUID, ? super UUID, ? super String, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function15<? super UUID, ? super UUID, ? super String, ? super LocalDate, ? super String, ? super BigDecimal, ? super TransactionStatus, ? super String, ? super String, ? super UserType, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }
