@@ -21,7 +21,7 @@ public class AdviceController {
                 ErrorDto.builder()
                         .message(ex.getMessage())
                         .exceptionName(ex.getClass().getSimpleName())
-                        .httpStatusCode(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .httpStatusCode(HttpStatus.UNPROCESSABLE_ENTITY.name())
                         .timestamp(LocalDateTime.now())
                         .build()
         );
@@ -34,7 +34,7 @@ public class AdviceController {
                 ErrorDto.builder()
                         .message(ex.getMessage())
                         .exceptionName(ex.getClass().getSimpleName())
-                        .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.name())
                         .timestamp(LocalDateTime.now())
                         .build()
         );

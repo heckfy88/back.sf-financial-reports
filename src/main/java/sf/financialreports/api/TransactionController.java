@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sf.financialreports.api.dto.ErrorDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.dashboard.DashboardDto;
@@ -38,6 +39,12 @@ public class TransactionController {
             mediaType = "application/json",
             schema = @Schema(implementation = TransactionDto.class)
     ))
+    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
     @PostMapping()
     public TransactionDto save(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
@@ -56,6 +63,9 @@ public class TransactionController {
             mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = TransactionDto.class))
     ))
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
     @GetMapping()
     public List<TransactionDto> getTransactions(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
@@ -76,8 +86,10 @@ public class TransactionController {
                                     schema = @Schema(type = "string", format = "binary")
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "Неавторизован"),
-                    @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+                    @ApiResponse(responseCode = "401", description = "Ошибка авторизации"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+                            { @Content(mediaType = "application/json", schema =
+                            @Schema(implementation = ErrorDto.class)) })
             }
     )
     @GetMapping("/download")
@@ -99,6 +111,12 @@ public class TransactionController {
 
     @Operation(summary = "Получить данные для дашборда", description = "Возвращает агрегированные данные по фильтру")
     @ApiResponse(responseCode = "200", description = "Данные дашборда успешно получены")
+    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
     @PostMapping("/dashboard")
     public DashboardDto getDashboard(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
@@ -110,8 +128,17 @@ public class TransactionController {
     }
 
     @Operation(summary = "Обновить транзакцию", description = "Обновляет существующую транзакцию")
-    @ApiResponse(responseCode = "200", description = "Транзакция успешно обновлена")
-    @PatchMapping("")
+    @ApiResponse(responseCode = "200", description = "Транзакция успешно обновлена", content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = TransactionDto.class)
+    ))
+    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
+    @PatchMapping()
     public TransactionDto update(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
@@ -122,7 +149,16 @@ public class TransactionController {
     }
 
     @Operation(summary = "Удалить транзакцию", description = "Удаляет транзакцию по её идентификатору")
-    @ApiResponse(responseCode = "200", description = "Транзакция успешно удалена")
+    @ApiResponse(responseCode = "200", description = "Транзакция успешно удалена", content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = TransactionDto.class)
+    ))
+    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
@@ -136,6 +172,9 @@ public class TransactionController {
 
     @Operation(summary = "Получить статусы транзакций", description = "Возвращает возможные статусы транзакций")
     @ApiResponse(responseCode = "200", description = "Статусы успешно получены")
+    @ApiResponse(responseCode = "500", description = "Internal server error", content =
+            { @Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class)) })
     @GetMapping("/statuses")
     public List<TransactionStatusDto> getStatuses(
             @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
