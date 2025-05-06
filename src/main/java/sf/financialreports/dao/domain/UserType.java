@@ -8,10 +8,10 @@ public enum UserType {
     LEGAL("Юридическое лицо"),
     ;
 
-    private final String name;
+    private final String title;
 
-    UserType(String name) {
-        this.name = name;
+    UserType(String title) {
+        this.title = title;
     }
 
     public static sf.financialreports.dao.jooq.enums.UserType fromDomain(UserType userType) {

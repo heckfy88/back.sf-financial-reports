@@ -12,6 +12,7 @@ import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import sf.financialreports.dao.jooq.Finances;
+import sf.financialreports.dao.jooq.Indexes;
 import sf.financialreports.dao.jooq.Keys;
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 import sf.financialreports.dao.jooq.enums.UserType;
@@ -158,6 +159,11 @@ public class Transaction extends TableImpl<TransactionRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Finances.FINANCES;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_TRANSACTION_USER_ID);
     }
 
     @Override

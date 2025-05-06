@@ -1,14 +1,18 @@
 package sf.financialreports.api.dto.dashboard;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryStatDto {
-    private Map<String, BigDecimal> incomeCategories;
-    private Map<String, BigDecimal> expenseCategories;
+    private String category;
+    private long count;
+    private BigDecimal totalAmount;
 }

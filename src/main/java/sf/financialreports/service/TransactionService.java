@@ -18,5 +18,7 @@ public interface TransactionService {
 
     List<TransactionDto> getTransactions();
 
+    byte[] download();
+
     List<TransactionStatusDto> getStatuses();
 }

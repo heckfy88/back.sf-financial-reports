@@ -3,19 +3,15 @@ package sf.financialreports.dao.repository;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.springframework.stereotype.Repository;
-import sf.financialreports.dao.domain.Transaction;
-import sf.financialreports.dao.domain.TransactionFilter;
-import sf.financialreports.dao.domain.UserType;
-import sf.financialreports.dao.domain.dashboard.Dashboard;
-import sf.financialreports.dao.domain.dashboard.TimeGroupStat;
+import sf.financialreports.dao.domain.*;
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.UUID;
 
+import static org.jooq.impl.DSL.*;
 import static sf.financialreports.dao.jooq.tables.Category.CATEGORY;
 import static sf.financialreports.dao.jooq.tables.Transaction.TRANSACTION;
 
@@ -113,93 +109,133 @@ public class TransactionRepository {
                 .fetchOneInto(Transaction.class);
     }
 
-    public Dashboard getDashboard(UUID userId, TransactionFilter filter) {
-        var t = TRANSACTION.as("t");
-        var c = CATEGORY.as("c");
+    public String download(UUID userId) {
+        var result = dslContext.select(
+                        TRANSACTION.ID.as("Идентификатор транзакции"),
+                        TRANSACTION.CATEGORY_NAME.as("Название категории"),
+                        TRANSACTION.DATE.as("Дата проведения транзакции"),
+                        TRANSACTION.DESCRIPTION.as("Описание"),
+                        TRANSACTION.AMOUNT.as("Сумма"),
+                        getTransactionStatusValue().as("Статус"),
+                        TRANSACTION.SENDER_BANK.as("Банк-отправитель"),
+                        TRANSACTION.SENDER_ACCOUNT.as("Счет отправителя"),
+                        getReceiverUserTypeValue().as("Тип получателя"),
+                        TRANSACTION.RECEIVER_BANK.as("Банк-получатель"),
+                        TRANSACTION.RECEIVER_ACCOUNT.as("Счет получателя"),
+                        TRANSACTION.RECEIVER_INN.as("ИНН получателя"),
+                        TRANSACTION.RECEIVER_PHONE.as("Телефон получателя"),
+                        TRANSACTION.CREATED_AT.as("Дата добавления транзакции")
+                )
+                .from(TRANSACTION)
+                .where(TRANSACTION.USER_ID.eq(userId))
+                .fetch();
 
-        // базовый запрос с join
-        var condition = t.USER_ID.eq(userId)
-                .and(t.CATEGORY_NAME.eq(c.NAME))
-                .and(c.USER_ID.eq(userId));
+        return result.formatCSV();
+    }
 
-        // применим фильтры
-        if (filter.getSenderBank() != null)
-            condition = condition.and(t.SENDER_BANK.in(filter.getSenderBank()));
+    public List<TransactionByCategoryType> getTransactionsByFilter(UUID userId, TransactionFilter filter) {
+        var condition = TRANSACTION.USER_ID.eq(userId)
+                .and(TRANSACTION.CATEGORY_NAME.eq(CATEGORY.NAME))
+                .and(CATEGORY.USER_ID.eq(userId));
 
-        if (filter.getReceiverBank() != null)
-            condition = condition.and(t.RECEIVER_BANK.in(filter.getReceiverBank()));
-
-/*        if (filter.getStatus() != null)
-            condition = condition.and(t.STATUS.in(TransactionStatus.valueOf(filter.getStatus())));*/
-
-        if (filter.getInn() != null)
-            condition = condition.and(t.RECEIVER_INN.eq(filter.getInn()));
-
-        if (filter.getSpecificDate() != null)
-            condition = condition.and(t.DATE.eq(filter.getSpecificDate()));
-        else {
-            if (filter.getDateFrom() != null)
-                condition = condition.and(t.DATE.ge(filter.getDateFrom()));
-            if (filter.getDateTo() != null)
-                condition = condition.and(t.DATE.le(filter.getDateTo()));
+        if (filter.getSenderBanks() != null && !filter.getSenderBanks().isEmpty()) {
+            condition = condition.and(TRANSACTION.SENDER_BANK.in(filter.getSenderBanks()));
         }
 
-        if (filter.getAmountFrom() != null)
-            condition = condition.and(t.AMOUNT.ge(filter.getAmountFrom()));
-        if (filter.getAmountTo() != null)
-            condition = condition.and(t.AMOUNT.le(filter.getAmountTo()));
+        if (filter.getReceiverBanks() != null && !filter.getReceiverBanks().isEmpty()) {
+            condition = condition.and(TRANSACTION.RECEIVER_BANK.in(filter.getReceiverBanks()));
+        }
 
-        if (filter.getCategoryName() != null)
-            condition = condition.and(t.CATEGORY_NAME.in(filter.getCategoryName()));
-/*        if (filter.getCategoryType() != null)
-            condition = condition.and(c.TYPE.eq(CategoryType.valueOf(filter.getCategoryType())));*/
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {
+            condition = condition.and(
+                    TRANSACTION.STATUS.in(filter.getStatuses().stream().map(TransactionStatus::valueOf).toList())
+            );
+        }
 
-        // Выполняем запрос
-        List<Transaction> transactions = dslContext
-                .select(t.asterisk(), c.TYPE)
-                .from(t)
-                .join(c).on(c.USER_ID.eq(t.USER_ID).and(c.NAME.eq(t.CATEGORY_NAME)))
+        if (filter.getInn() != null) {
+            condition = condition.and(TRANSACTION.RECEIVER_INN.eq(filter.getInn()));
+        }
+
+        if (filter.getSpecificDate() != null) {
+            condition = condition.and(TRANSACTION.DATE.eq(filter.getSpecificDate()));
+        } else {
+            if (filter.getDateFrom() != null)
+                condition = condition.and(TRANSACTION.DATE.ge(filter.getDateFrom()));
+            if (filter.getDateTo() != null)
+                condition = condition.and(TRANSACTION.DATE.le(filter.getDateTo()));
+        }
+
+        if (filter.getAmountFrom() != null) {
+            condition = condition.and(TRANSACTION.AMOUNT.ge(filter.getAmountFrom()));
+        }
+        if (filter.getAmountTo() != null) {
+            condition = condition.and(TRANSACTION.AMOUNT.le(filter.getAmountTo()));
+        }
+
+        if (filter.getCategoryType() != null) {
+            condition = condition.and(CATEGORY.TYPE.eq(
+                    CategoryType.fromDomain(filter.getCategoryType())
+            ));
+        }
+
+        if (filter.getCategoryNames() != null && !filter.getCategoryNames().isEmpty()) {
+            condition = condition.and(TRANSACTION.CATEGORY_NAME.in(filter.getCategoryNames()));
+        }
+
+        return dslContext
+                .select(
+                        row(
+                                TRANSACTION.ID,
+                                TRANSACTION.USER_ID,
+                                TRANSACTION.CATEGORY_NAME,
+                                TRANSACTION.DATE,
+                                TRANSACTION.DESCRIPTION,
+                                TRANSACTION.AMOUNT,
+                                TRANSACTION.STATUS,
+                                TRANSACTION.SENDER_BANK,
+                                TRANSACTION.SENDER_ACCOUNT,
+                                TRANSACTION.RECEIVER_USER_TYPE,
+                                TRANSACTION.RECEIVER_BANK,
+                                TRANSACTION.RECEIVER_ACCOUNT,
+                                TRANSACTION.RECEIVER_INN,
+                                TRANSACTION.RECEIVER_PHONE,
+                                TRANSACTION.CREATED_AT
+                        ).as("transaction"),
+                        getCategoryTypeValue().as("type")
+                )
+                .from(TRANSACTION)
+                .join(CATEGORY).on(
+                        CATEGORY.USER_ID.eq(TRANSACTION.USER_ID)
+                                .and(CATEGORY.NAME.eq(TRANSACTION.CATEGORY_NAME))
+                )
                 .where(condition)
-                .fetchInto(Transaction.class);
-
-        // Обработка
-        return aggregateDashboard(transactions);
+                .fetchInto(TransactionByCategoryType.class);
     }
 
-    private Dashboard aggregateDashboard(List<Transaction> transactions) {
-        Dashboard result = new Dashboard();
-
-        return result;
+    //Если будет время - разобраться через конвертер типа, но там тоже была проблема. Намного удобнее конвертация в csv
+    private Field<String> getTransactionStatusValue() {
+        return when(TRANSACTION.STATUS.eq(TransactionStatus.NEW), inline(Status.NEW.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.CONFIRMED), inline(Status.CONFIRMED.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.PROCESSING), inline(Status.PROCESSING.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.COMPLETED), inline(Status.COMPLETED.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.RETURNED), inline(Status.RETURNED.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.CANCELLED), inline(Status.CANCELLED.getTitle()))
+                .when(TRANSACTION.STATUS.eq(TransactionStatus.DELETED), inline(Status.DELETED.getTitle()));
     }
 
-    private Map<String, List<TimeGroupStat>> aggregateTimeGroups(List<Transaction> transactions) {
-        DateTimeFormatter weeklyFmt = DateTimeFormatter.ofPattern("YYYY-'W'ww");
-        DateTimeFormatter monthlyFmt = DateTimeFormatter.ofPattern("yyyy-MM");
-        DateTimeFormatter yearlyFmt = DateTimeFormatter.ofPattern("yyyy");
-
-        Function<Transaction, LocalDate> toDate = t -> LocalDate.parse(t.getDate());
-
-        Map<String, List<TimeGroupStat>> result = new HashMap<>();
-
-        result.put("weekly", groupAndCount(transactions, t -> toDate.apply(t).format(weeklyFmt)));
-        result.put("monthly", groupAndCount(transactions, t -> toDate.apply(t).format(monthlyFmt)));
-        result.put("quarterly", groupAndCount(transactions, t -> formatQuarter(toDate.apply(t))));
-        result.put("yearly", groupAndCount(transactions, t -> toDate.apply(t).format(yearlyFmt)));
-
-        return result;
+    private Field<String> getReceiverUserTypeValue() {
+        return when(TRANSACTION.RECEIVER_USER_TYPE.eq(sf.financialreports.dao.jooq.enums.UserType.PHYSICAL),
+                inline(UserType.PHYSICAL.getTitle()))
+                .when(TRANSACTION.RECEIVER_USER_TYPE.eq(sf.financialreports.dao.jooq.enums.UserType.LEGAL),
+                        inline(UserType.LEGAL.getTitle()));
     }
 
-    private List<TimeGroupStat> groupAndCount(List<Transaction> transactions, Function<Transaction, String> classifier) {
-        return transactions.stream()
-                .collect(Collectors.groupingBy(classifier, Collectors.counting()))
-                .entrySet().stream()
-                .map(e -> new TimeGroupStat(e.getKey(), e.getValue()))
-                .sorted(Comparator.comparing(TimeGroupStat::getPeriod))
-                .collect(Collectors.toList());
-    }
-
-    private String formatQuarter(LocalDate date) {
-        int q = (date.getMonthValue() - 1) / 3 + 1;
-        return date.getYear() + "-Q" + q;
+    private Field<String> getCategoryTypeValue() {
+        return when(
+                CATEGORY.TYPE.eq(sf.financialreports.dao.jooq.enums.CategoryType.EXPENSE),
+                inline(CategoryType.EXPENSE.name()))
+                .when(
+                        CATEGORY.TYPE.eq(sf.financialreports.dao.jooq.enums.CategoryType.INCOME),
+                        inline(CategoryType.INCOME.name()));
     }
 }

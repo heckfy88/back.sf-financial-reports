@@ -1,5 +1,8 @@
 package sf.financialreports.api;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.financialreports.api.dto.TransactionDto;
@@ -8,6 +11,7 @@ import sf.financialreports.api.dto.dashboard.DashboardDto;
 import sf.financialreports.api.dto.dashboard.TransactionFilterDto;
 import sf.financialreports.service.TransactionService;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +38,22 @@ public class TransactionController {
             @RequestHeader("operUid") UUID operUid
     ) {
         return transactionService.getTransactions();
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<InputStreamResource> download(
+            @RequestHeader("operUid") UUID operUid
+    ) {
+        byte[] csvFile = transactionService.download();
+        InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(csvFile));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=transactions.csv");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(new MediaType("text", "csv"))
+                .body(inputStreamResource);
     }
 
     @PostMapping("/dashboard")
