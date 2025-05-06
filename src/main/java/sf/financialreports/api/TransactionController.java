@@ -12,10 +12,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.ErrorDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.dashboard.DashboardDto;
+import sf.financialreports.api.dto.dashboard.StatusCountDto;
 import sf.financialreports.api.dto.dashboard.TransactionFilterDto;
 import sf.financialreports.service.TransactionService;
 
@@ -170,8 +172,11 @@ public class TransactionController {
         return ResponseEntity.ok().body("Transaction '%s' deleted successfully".formatted(id));
     }
 
-    @Operation(summary = "Получить статусы транзакций", description = "Возвращает возможные статусы транзакций")
-    @ApiResponse(responseCode = "200", description = "Статусы успешно получены")
+    @Operation(summary = "Получить статусы транзакций", description = "Возвращает статусы по транзакциям пользователя")
+    @ApiResponse(responseCode = "200", description = "Статусы успешно получены", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = TransactionStatusDto.class))
+    ))
     @ApiResponse(responseCode = "500", description = "Internal server error", content =
             { @Content(mediaType = "application/json", schema =
             @Schema(implementation = ErrorDto.class)) })

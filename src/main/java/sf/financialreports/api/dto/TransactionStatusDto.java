@@ -3,8 +3,12 @@ package sf.financialreports.api.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jdk.jshell.Snippet;
+import lombok.Builder;
+import lombok.Data;
 import sf.financialreports.dao.domain.Status;
 
+@Builder
 @Schema(description = "Статус транзакции")
 public record TransactionStatusDto(
 

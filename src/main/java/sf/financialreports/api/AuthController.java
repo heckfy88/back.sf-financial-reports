@@ -33,7 +33,7 @@ public class AuthController {
                                     schema = @Schema(implementation = TokenDto.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "400", description = "Неверный логин или пароль"),
+                    @ApiResponse(responseCode = "401", description = "Неверный логин или пароль"),
                     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
             }
     )
