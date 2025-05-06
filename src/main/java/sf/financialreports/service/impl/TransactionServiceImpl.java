@@ -13,7 +13,7 @@ import sf.financialreports.api.exceptions.TransactionValidationException;
 import sf.financialreports.dao.domain.*;
 import sf.financialreports.dao.repository.CategoryRepository;
 import sf.financialreports.dao.repository.TransactionRepository;
-import sf.financialreports.dao.repository.UserRepository;
+import sf.financialreports.service.AuthenticationService;
 import sf.financialreports.service.TransactionService;
 
 import java.math.BigDecimal;
@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
-    private final AuthenticationServiceImpl authenticationService;
+    private final AuthenticationService authenticationService;
+
 
     @Transactional
     @Override
     public TransactionDto save(TransactionDto dto) {
-        User user = getUserFromToken();
+        User user = authenticationService.getUserFromToken();
 
         validate(dto);
 
@@ -47,7 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     @Override
     public TransactionDto update(TransactionDto dto) {
-        User user = getUserFromToken();
+        User user = authenticationService.getUserFromToken();
 
         Transaction existingTransaction = transactionRepository.findById(dto.getId());
         if (existingTransaction == null) {
@@ -86,13 +86,13 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionRepository.findById(id).getStatus() != Status.NEW) {
             throw new TransactionOperationException(String.format("Transaction '%s' is not new", id));
         }
-        transaction.setStatus(Status.DELETED);
-        transactionRepository.update(transaction);
+
+        transactionRepository.delete(id);
     }
 
     @Override
     public DashboardDto getDashboard(TransactionFilterDto dto) {
-        User user = getUserFromToken();
+        User user = authenticationService.getUserFromToken();
         List<TransactionByCategoryType> transactionsByType = transactionRepository.getTransactionsByFilter(user.getId(), TransactionFilter.from(dto));
 
         return aggregateDashboard(transactionsByType);
@@ -100,11 +100,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getTransactions() {
-        User user = getUserFromToken();
+        User user = authenticationService.getUserFromToken();
         return transactionRepository.getTransactions(user.getId()).stream().map(transaction ->
                 TransactionDto.builder()
                         .id(transaction.getId())
-                        .date(transaction.getDate())
+                        .date(transaction.getDate().replace("-", "."))
                         .description(transaction.getDescription())
                         .amount(transaction.getAmount())
                         .status(TransactionStatusDto.from(transaction.getStatus()))
@@ -123,7 +123,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public byte[] download() {
-        User user = getUserFromToken();
+        User user = authenticationService.getUserFromToken();
 
         String csvString = transactionRepository.download(user.getId());
 
@@ -143,6 +143,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void checkInn(String receiverInn) {
+        if (receiverInn == null) {
+            return;
+        }
         if (!(receiverInn.matches("\\d{11}"))) {
             throw new TransactionValidationException(
                     String.format("Invalid inn number: '%s' should be 11 digits", receiverInn)
@@ -151,12 +154,18 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void checkPhone(String receiverPhone) {
+        if (receiverPhone == null) {
+            return;
+        }
         if (!receiverPhone.matches("^(?:\\+7|8)?[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2}$")) {
             throw new TransactionValidationException(String.format("Invalid phone number: '%s'", receiverPhone));
         }
     }
 
     private void checkDate(String date) {
+        if (date == null) {
+            return;
+        }
         if (!date.matches("\\d{4}\\.\\d{2}\\.\\d{2}")) {
             throw new TransactionValidationException(String.format("Invalid date: %s", date));
         }
@@ -165,7 +174,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionDto buildTransactionDto(Category category, Transaction transaction) {
         return TransactionDto.builder()
                 .id(transaction.getId())
-                .date(transaction.getDate())
+                .date(transaction.getDate().replace("-", "."))
                 .description(transaction.getDescription())
                 .amount(transaction.getAmount())
                 .status(TransactionStatusDto.from(transaction.getStatus()))
@@ -326,8 +335,4 @@ public class TransactionServiceImpl implements TransactionService {
         return date.getYear() + "-Q" + q;
     }
 
-    private User getUserFromToken() {
-        Map<String, Object> claims = authenticationService.getToken().getClaims();
-        return userRepository.findById(UUID.fromString(claims.get("sub").toString()));
-    }
 }

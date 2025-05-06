@@ -4,17 +4,16 @@
 package sf.financialreports.dao.jooq;
 
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
-
+import sf.financialreports.dao.jooq.tables.Audit;
 import sf.financialreports.dao.jooq.tables.Category;
-import sf.financialreports.dao.jooq.tables.IntegrationLog;
 import sf.financialreports.dao.jooq.tables.Transaction;
 import sf.financialreports.dao.jooq.tables.User;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -31,14 +30,14 @@ public class Finances extends SchemaImpl {
     public static final Finances FINANCES = new Finances();
 
     /**
+     * The table <code>finances.audit</code>.
+     */
+    public final Audit AUDIT = Audit.AUDIT;
+
+    /**
      * The table <code>finances.category</code>.
      */
     public final Category CATEGORY = Category.CATEGORY;
-
-    /**
-     * The table <code>finances.integration_log</code>.
-     */
-    public final IntegrationLog INTEGRATION_LOG = IntegrationLog.INTEGRATION_LOG;
 
     /**
      * The table <code>finances.transaction</code>.
@@ -60,14 +59,14 @@ public class Finances extends SchemaImpl {
 
     @Override
     public Catalog getCatalog() {
-        return DefaultCatalog.DEFAULT_CATALOG;
+        return sf.financialreports.dao.jooq.DefaultCatalog.DEFAULT_CATALOG;
     }
 
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+                Audit.AUDIT,
             Category.CATEGORY,
-            IntegrationLog.INTEGRATION_LOG,
             Transaction.TRANSACTION,
             User.USER
         );

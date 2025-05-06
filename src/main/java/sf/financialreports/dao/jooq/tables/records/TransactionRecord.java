@@ -206,38 +206,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Setter for <code>finances.transaction.receiver_user_type</code>.
-     */
-    public void setReceiverUserType(UserType value) {
-        set(9, value);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_inn</code>.
-     */
-    public String getReceiverInn() {
-        return (String) get(12);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_bank</code>.
-     */
-    public String getReceiverBank() {
-        return (String) get(10);
-    }
-
-    /**
      * Getter for <code>finances.transaction.receiver_account</code>.
      */
     public String getReceiverAccount() {
         return (String) get(11);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_phone</code>.
-     */
-    public String getReceiverPhone() {
-        return (String) get(13);
     }
 
     /**
@@ -248,10 +220,38 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
+     * Setter for <code>finances.transaction.receiver_user_type</code>.
+     */
+    public void setReceiverUserType(UserType value) {
+        set(9, value);
+    }
+
+    /**
      * Setter for <code>finances.transaction.receiver_phone</code>.
      */
     public void setReceiverPhone(String value) {
         set(13, value);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_bank</code>.
+     */
+    public String getReceiverBank() {
+        return (String) get(10);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_inn</code>.
+     */
+    public String getReceiverInn() {
+        return (String) get(12);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_phone</code>.
+     */
+    public String getReceiverPhone() {
+        return (String) get(13);
     }
 
     // -------------------------------------------------------------------------
