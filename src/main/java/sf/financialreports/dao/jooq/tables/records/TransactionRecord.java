@@ -4,20 +4,19 @@
 package sf.financialreports.dao.jooq.tables.records;
 
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record15;
 import org.jooq.Row15;
 import org.jooq.impl.UpdatableRecordImpl;
-
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 import sf.financialreports.dao.jooq.enums.UserType;
 import sf.financialreports.dao.jooq.tables.Transaction;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 /**
@@ -204,13 +203,6 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Setter for <code>finances.transaction.receiver_user_type</code>.
-     */
-    public void setReceiverUserType(UserType value) {
-        set(9, value);
-    }
-
-    /**
      * Getter for <code>finances.transaction.receiver_inn</code>.
      */
     public String getReceiverInn() {
@@ -243,27 +235,6 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
      */
     public LocalDateTime getCreatedAt() {
         return (LocalDateTime) get(14);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_bank</code>.
-     */
-    public String getReceiverBank() {
-        return (String) get(10);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_inn</code>.
-     */
-    public String getReceiverInn() {
-        return (String) get(12);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_phone</code>.
-     */
-    public String getReceiverPhone() {
-        return (String) get(13);
     }
 
     // -------------------------------------------------------------------------

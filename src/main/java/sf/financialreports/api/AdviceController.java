@@ -57,7 +57,7 @@ public class AdviceController {
         ErrorDto errorDto = ErrorDto.builder()
                 .message(ex.getMessage())
                 .exceptionName(ex.getClass().getSimpleName())
-                .httpStatusCode(HttpStatus.NOT_FOUND)
+                .httpStatusCode(HttpStatus.NOT_FOUND.name())
                 .timestamp(LocalDateTime.now())
                 .build();
 

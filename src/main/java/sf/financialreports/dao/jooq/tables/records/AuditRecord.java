@@ -24,10 +24,24 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>finances.audit.id</code>.
+     */
+    public void setId(UUID value) {
+        set(0, value);
+    }
+
+    /**
      * Create a detached AuditRecord
      */
     public AuditRecord() {
         super(Audit.AUDIT);
+    }
+
+    /**
+     * Setter for <code>finances.audit.oper_uid</code>.
+     */
+    public void setOperUid(UUID value) {
+        set(1, value);
     }
 
     /**
@@ -50,41 +64,6 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.id</code>.
-     */
-    public UUID getId() {
-        return (UUID) get(0);
-    }
-
-    /**
-     * Setter for <code>finances.audit.id</code>.
-     */
-    public void setId(UUID value) {
-        set(0, value);
-    }
-
-    /**
-     * Getter for <code>finances.audit.oper_uid</code>.
-     */
-    public UUID getOperUid() {
-        return (UUID) get(1);
-    }
-
-    /**
-     * Setter for <code>finances.audit.oper_uid</code>.
-     */
-    public void setOperUid(UUID value) {
-        set(1, value);
-    }
-
-    /**
-     * Getter for <code>finances.audit.user_id</code>.
-     */
-    public UUID getUserId() {
-        return (UUID) get(2);
-    }
-
-    /**
      * Setter for <code>finances.audit.user_id</code>.
      */
     public void setUserId(UUID value) {
@@ -92,10 +71,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.message_type</code>.
+     * Getter for <code>finances.audit.id</code>.
      */
-    public String getMessageType() {
-        return (String) get(3);
+    public UUID getId() {
+        return (UUID) get(0);
     }
 
     /**
@@ -106,10 +85,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_type</code>.
+     * Getter for <code>finances.audit.oper_uid</code>.
      */
-    public String getRequestType() {
-        return (String) get(4);
+    public UUID getOperUid() {
+        return (UUID) get(1);
     }
 
     /**
@@ -120,10 +99,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_path</code>.
+     * Getter for <code>finances.audit.user_id</code>.
      */
-    public String getRequestPath() {
-        return (String) get(5);
+    public UUID getUserId() {
+        return (UUID) get(2);
     }
 
     /**
@@ -134,10 +113,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_headers</code>.
+     * Getter for <code>finances.audit.message_type</code>.
      */
-    public String getRequestHeaders() {
-        return (String) get(6);
+    public String getMessageType() {
+        return (String) get(3);
     }
 
     /**
@@ -148,10 +127,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_params</code>.
+     * Getter for <code>finances.audit.request_type</code>.
      */
-    public String getRequestParams() {
-        return (String) get(7);
+    public String getRequestType() {
+        return (String) get(4);
     }
 
     /**
@@ -162,6 +141,13 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
+     * Getter for <code>finances.audit.request_path</code>.
+     */
+    public String getRequestPath() {
+        return (String) get(5);
+    }
+
+    /**
      * Getter for <code>finances.audit.payload</code>.
      */
     public String getPayload() {
@@ -169,15 +155,18 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.payload</code>.
+     * Getter for <code>finances.audit.request_headers</code>.
      */
-    public void setPayload(String value) {
-        set(8, value);
+    public String getRequestHeaders() {
+        return (String) get(6);
     }
 
-    // -------------------------------------------------------------------------
-    // Primary key information
-    // -------------------------------------------------------------------------
+    /**
+     * Getter for <code>finances.audit.request_params</code>.
+     */
+    public String getRequestParams() {
+        return (String) get(7);
+    }
 
     /**
      * Getter for <code>finances.audit.created_at</code>.
@@ -187,20 +176,17 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Primary key information
     // -------------------------------------------------------------------------
-
-    /**
-     * Setter for <code>finances.audit.created_at</code>.
-     */
-    public void setCreatedAt(LocalDateTime value) {
-        set(9, value);
-    }
 
     @Override
     public Record1<UUID> key() {
         return (Record1) super.key();
     }
+
+    // -------------------------------------------------------------------------
+    // Record10 type implementation
+    // -------------------------------------------------------------------------
 
     @Override
     public Row10<UUID, UUID, UUID, String, String, String, String, String, String, LocalDateTime> fieldsRow() {
@@ -416,10 +402,6 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public AuditRecord value10(LocalDateTime value) {
         setCreatedAt(value);
@@ -439,5 +421,23 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
         value9(value9);
         value10(value10);
         return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Setter for <code>finances.audit.payload</code>.
+     */
+    public void setPayload(String value) {
+        set(8, value);
+    }
+
+    /**
+     * Setter for <code>finances.audit.created_at</code>.
+     */
+    public void setCreatedAt(LocalDateTime value) {
+        set(9, value);
     }
 }
