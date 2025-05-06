@@ -8,17 +8,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.JwsHeader;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 import sf.financialreports.api.dto.login.LoginDto;
 import sf.financialreports.config.security.JwtProperties;
+import sf.financialreports.dao.domain.User;
+import sf.financialreports.dao.repository.UserRepository;
 import sf.financialreports.service.AuthenticationService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtEncoder jwtEncoder;
     private final JwtProperties jwtProperties;
+    private final UserRepository userRepository;
 
     Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
@@ -41,6 +43,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         return generateToken(authentication);
+    }
+
+    @Override
+    public User getUserFromToken() {
+        Jwt jwt = getToken();
+        if (jwt == null) {
+            return null;
+        }
+
+        Map<String, Object> claims = jwt.getClaims();
+        return userRepository.findById(UUID.fromString(claims.get("sub").toString()));
     }
 
     private String generateToken(Authentication authentication) {

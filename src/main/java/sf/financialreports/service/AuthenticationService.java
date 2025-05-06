@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import sf.financialreports.api.dto.login.LoginDto;
+import sf.financialreports.dao.domain.User;
 
 public interface AuthenticationService {
     String login(LoginDto loginDto);
@@ -16,4 +17,6 @@ public interface AuthenticationService {
         }
         return null;
     }
+
+    User getUserFromToken();
 }

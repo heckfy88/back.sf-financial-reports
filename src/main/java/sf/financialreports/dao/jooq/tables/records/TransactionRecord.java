@@ -204,6 +204,13 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
+     * Setter for <code>finances.transaction.receiver_user_type</code>.
+     */
+    public void setReceiverUserType(UserType value) {
+        set(9, value);
+    }
+
+    /**
      * Getter for <code>finances.transaction.receiver_inn</code>.
      */
     public String getReceiverInn() {
@@ -236,6 +243,27 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
      */
     public LocalDateTime getCreatedAt() {
         return (LocalDateTime) get(14);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_bank</code>.
+     */
+    public String getReceiverBank() {
+        return (String) get(10);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_inn</code>.
+     */
+    public String getReceiverInn() {
+        return (String) get(12);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.receiver_phone</code>.
+     */
+    public String getReceiverPhone() {
+        return (String) get(13);
     }
 
     // -------------------------------------------------------------------------

@@ -9,13 +9,12 @@ import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
-
+import sf.financialreports.dao.jooq.tables.Audit;
 import sf.financialreports.dao.jooq.tables.Category;
-import sf.financialreports.dao.jooq.tables.IntegrationLog;
 import sf.financialreports.dao.jooq.tables.Transaction;
 import sf.financialreports.dao.jooq.tables.User;
+import sf.financialreports.dao.jooq.tables.records.AuditRecord;
 import sf.financialreports.dao.jooq.tables.records.CategoryRecord;
-import sf.financialreports.dao.jooq.tables.records.IntegrationLogRecord;
 import sf.financialreports.dao.jooq.tables.records.TransactionRecord;
 import sf.financialreports.dao.jooq.tables.records.UserRecord;
 
@@ -31,9 +30,9 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<AuditRecord> PK_AUDIT = Internal.createUniqueKey(Audit.AUDIT, DSL.name("pk_audit"), new TableField[]{Audit.AUDIT.ID}, true);
     public static final UniqueKey<CategoryRecord> PK_CATEGORY = Internal.createUniqueKey(Category.CATEGORY, DSL.name("pk_category"), new TableField[] { Category.CATEGORY.ID }, true);
     public static final UniqueKey<CategoryRecord> UNIQUE_CATEGORY_NAME = Internal.createUniqueKey(Category.CATEGORY, DSL.name("unique_category_name"), new TableField[] { Category.CATEGORY.USER_ID, Category.CATEGORY.NAME }, true);
-    public static final UniqueKey<IntegrationLogRecord> PK_INTEGRATION_LOG = Internal.createUniqueKey(IntegrationLog.INTEGRATION_LOG, DSL.name("pk_integration_log"), new TableField[] { IntegrationLog.INTEGRATION_LOG.ID }, true);
     public static final UniqueKey<TransactionRecord> PK_TRANSACTION = Internal.createUniqueKey(Transaction.TRANSACTION, DSL.name("pk_transaction"), new TableField[] { Transaction.TRANSACTION.ID }, true);
     public static final UniqueKey<UserRecord> PK_USER = Internal.createUniqueKey(User.USER, DSL.name("pk_user"), new TableField[] { User.USER.ID }, true);
     public static final UniqueKey<UserRecord> USER_EMAIL_KEY = Internal.createUniqueKey(User.USER, DSL.name("user_email_key"), new TableField[] { User.USER.EMAIL }, true);

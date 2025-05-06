@@ -1,21 +1,18 @@
 package sf.financialreports.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import sf.financialreports.dao.repository.UserRepository;
-import sf.financialreports.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+@RequiredArgsConstructor
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -30,5 +27,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .password(user.getPasswordHash())
                 .build();
     }
-
 }

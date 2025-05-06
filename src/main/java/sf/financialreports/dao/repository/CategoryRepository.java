@@ -75,7 +75,8 @@ public class CategoryRepository {
                 .set(CATEGORY.NAME, category.getName())
                 .set(CATEGORY.DESCRIPTION, category.getDescription())
                 .set(CATEGORY.TYPE, CategoryType.valueOf(category.getType().name()))
-                .where(CATEGORY.ID.eq(category.getId()))
+                .where(CATEGORY.NAME.eq(category.getName()))
+                .and(CATEGORY.USER_ID.eq(category.getUserId()))
                 .returning(CATEGORY_FIELDS)
                 .fetchSingleInto(Category.class);
     }

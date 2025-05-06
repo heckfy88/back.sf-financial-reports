@@ -102,6 +102,14 @@ public class TransactionRepository {
 
     }
 
+    public Transaction delete(UUID id) {
+        return dslContext.update(TRANSACTION)
+                .set(TRANSACTION.STATUS, TransactionStatus.DELETED)
+                .where(TRANSACTION.ID.eq(id))
+                .returning(TRANSACTION_FIELDS)
+                .fetchSingleInto(Transaction.class);
+    }
+
     public Transaction findById(UUID id) {
         return dslContext.select(TRANSACTION_FIELDS)
                 .from(TRANSACTION)
