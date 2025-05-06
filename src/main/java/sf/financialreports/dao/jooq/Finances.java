@@ -30,22 +30,22 @@ public class Finances extends SchemaImpl {
     public static final Finances FINANCES = new Finances();
 
     /**
-     * The table <code>finances.audit</code>.
+     * Аудит сервиса
      */
     public final Audit AUDIT = Audit.AUDIT;
 
     /**
-     * The table <code>finances.category</code>.
+     * Категория дохода/расхода
      */
     public final Category CATEGORY = Category.CATEGORY;
 
     /**
-     * The table <code>finances.transaction</code>.
+     * Таблица транзакций
      */
     public final Transaction TRANSACTION = Transaction.TRANSACTION;
 
     /**
-     * The table <code>finances.user</code>.
+     * Пользователи
      */
     public final User USER = User.USER;
 

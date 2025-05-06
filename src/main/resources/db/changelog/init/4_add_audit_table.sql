@@ -16,4 +16,17 @@ create table finances.audit
     created_at      timestamp     not null default now(),
 
     constraint pk_audit primary key (id)
-)
+);
+
+comment on table finances.audit is 'Аудит сервиса';
+
+comment on column finances.audit.id is 'Идентификатор записи';
+comment on column finances.audit.oper_uid is 'Уникальный идентификатор операции';
+comment on column finances.audit.user_id is 'Идентификатор пользователя';
+comment on column finances.audit.message_type is 'Тип сообщения';
+comment on column finances.audit.request_type is 'Тип запроса';
+comment on column finances.audit.request_path is 'Путь запроса';
+comment on column finances.audit.request_headers is 'Заголовки запроса';
+comment on column finances.audit.request_params is 'Параметры запроса';
+comment on column finances.audit.payload is 'Тело запроса';
+comment on column finances.audit.created_at is 'Дата создания записи';

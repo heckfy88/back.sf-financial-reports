@@ -246,13 +246,4 @@ public class TransactionRepository {
                         CATEGORY.TYPE.eq(sf.financialreports.dao.jooq.enums.CategoryType.INCOME),
                         inline(CategoryType.INCOME.name()));
     }
-
-    public List<Status> getStatuses(UUID userId) {
-        return dslContext
-                .select(TRANSACTION.STATUS)
-                .from(TRANSACTION)
-                .where(TRANSACTION.USER_ID.eq(userId))
-                .fetch()
-                .getValues(TRANSACTION.STATUS, Status.class);
-    }
 }

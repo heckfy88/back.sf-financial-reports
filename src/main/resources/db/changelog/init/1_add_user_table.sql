@@ -26,3 +26,16 @@ values ('123e4567-e89b-12d3-a456-426614174000', 'John Doe', 'john.doe@example.co
         '$2a$12$4qxGESYATnYD5kQyJDDU2OpwU9GOvDwgoETaVthsSUIywy4wSX2dK', 'LEGAL', '2022-01-01 12:00:00', true),
        ('123e4567-e89b-12d3-a456-426614174003', 'Company Inc.', 'company@example.com',
         '$2a$12$CROd88OYK1C1VMg9Bzv./uP4GuUr1NL.qYNPvWv29Xamb.Q8/ga4a', 'LEGAL', '2022-01-01 12:00:00', true);
+
+
+comment on type finances.user_type is 'Тип пользователя (физическое лицо или юридическое лицо)';
+
+comment on table finances.user is 'Пользователи';
+
+comment on column finances.user.id is 'Идентификатор пользователя';
+comment on column finances.user.name is 'Имя пользователя';
+comment on column finances.user.email is 'Электронная почта пользователя';
+comment on column finances.user.password_hash is 'Хэш пароля пользователя';
+comment on column finances.user.type is 'Тип пользователя (физическое лицо или юридическое лицо)';
+comment on column finances.user.created_at is 'Дата создания пользователя';
+comment on column finances.user.is_active is 'Активность пользователя';

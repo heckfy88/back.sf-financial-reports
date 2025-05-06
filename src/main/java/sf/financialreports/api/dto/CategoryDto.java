@@ -12,16 +12,12 @@ import java.util.UUID;
 @Data
 @Schema(description = "Категория транзакции")
 public class CategoryDto {
-
     @Schema(description = "Идентификатор категории", example = "d1a78e9b-cbd9-4f6b-b614-5c9c2f5153ba")
     private UUID id;
-
     @Schema(description = "Название категории", example = "Зарплата")
     private String name;
-
     @Schema(description = "Описание категории", example = "Регулярный доход от работодателя")
     private String description;
-
     @Schema(description = "Тип категории (INCOME — доход, EXPENSE — расход)", example = "INCOME")
     private CategoryType type;
 

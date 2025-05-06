@@ -51,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction existingTransaction = transactionRepository.findById(dto.getId());
         if (existingTransaction == null) {
-            throw new NotFoundException(String.format("Transaction '%s' ", dto.getId()));
+            throw new NotFoundException(String.format("Transaction '%s'", dto.getId()));
         }
         if (Status.valueOf(existingTransaction.getStatus().name()) != Status.NEW) {
             throw new TransactionOperationException(String.format("Transaction '%s' is not new", dto.getId()));
@@ -132,8 +132,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionStatusDto> getStatuses() {
-        User user = getUserFromToken();
-        return transactionRepository.getStatuses(user.getId()).stream().map(status ->
+        return Arrays.stream(Status.values()).map(status ->
                 TransactionStatusDto.builder()
                         .name(status.name())
                         .title(status.getTitle())

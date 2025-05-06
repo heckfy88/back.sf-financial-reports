@@ -14,10 +14,10 @@ import java.util.List;
 @Data
 public class TransactionFilterDto {
 
-    @Schema(description = "Список банков-отправителей")
+    @Schema(description = "Список банков-отправителей", example = "[\"Тинькофф\", \"Сбер\"]")
     private List<String> senderBanks;
 
-    @Schema(description = "Список банков-получателей")
+    @Schema(description = "Список банков-получателей", example = "[\"Тинькофф\", \"Сбер\"]")
     private List<String> receiverBanks;
 
     @Schema(description = "Список статусов транзакций", example = "[\"CONFIRMED\", \"NEW\"]")
