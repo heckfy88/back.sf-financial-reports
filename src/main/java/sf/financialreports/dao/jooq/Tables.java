@@ -17,22 +17,22 @@ import sf.financialreports.dao.jooq.tables.User;
 public class Tables {
 
     /**
-     * The table <code>finances.audit</code>.
+     * Аудит сервиса
      */
     public static final Audit AUDIT = Audit.AUDIT;
 
     /**
-     * The table <code>finances.category</code>.
+     * Категория дохода/расхода
      */
     public static final Category CATEGORY = Category.CATEGORY;
 
     /**
-     * The table <code>finances.transaction</code>.
+     * Таблица транзакций
      */
     public static final Transaction TRANSACTION = Transaction.TRANSACTION;
 
     /**
-     * The table <code>finances.user</code>.
+     * Пользователи
      */
     public static final User USER = User.USER;
 }

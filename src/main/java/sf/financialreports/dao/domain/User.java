@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sf.financialreports.api.dto.UserDto;
 
 import java.util.UUID;
 
@@ -18,14 +17,4 @@ public class User {
     private String email;
     private String passwordHash;
     private UserType type;
-
-    public static User from(UserDto dto) {
-        return new User(
-                dto.getId(),
-                dto.getUsername(),
-                dto.getEmail(),
-                dto.getPasswordHash(),
-                dto.getType()
-        );
-    }
 }

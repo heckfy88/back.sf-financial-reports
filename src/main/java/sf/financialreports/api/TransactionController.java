@@ -16,12 +16,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sf.financialreports.api.dto.CategoryDto;
 import sf.financialreports.api.dto.ErrorDto;
+import sf.financialreports.api.dto.MessageDto;
 import sf.financialreports.api.dto.TransactionDto;
 import sf.financialreports.api.dto.TransactionStatusDto;
 import sf.financialreports.api.dto.dashboard.DashboardDto;
-import sf.financialreports.api.dto.dashboard.StatusCountDto;
 import sf.financialreports.api.dto.dashboard.TransactionFilterDto;
 import sf.financialreports.dao.domain.Audit;
 import sf.financialreports.dao.domain.MessageType;
@@ -42,7 +41,7 @@ public class TransactionController {
     private final TransactionService transactionService;
     private final AuditService auditService;
 
-    @Operation(summary = "Создание транзакции", description = "Создает новую транзакцию")
+    @Operation(summary = "Создать транзакцию", description = "Создает новую транзакцию")
     @ApiResponse(responseCode = "200", description = "Транзакция успешно создана", content = @Content(
             mediaType = "application/json",
             schema = @Schema(implementation = TransactionDto.class)
@@ -55,7 +54,7 @@ public class TransactionController {
             @Schema(implementation = ErrorDto.class)) })
     @PostMapping()
     public TransactionDto save(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(description = "Данные транзакции", required = true, content = @Content(
                     mediaType = "application/json",
@@ -86,7 +85,7 @@ public class TransactionController {
         return savedDto;
     }
 
-    @Operation(summary = "Получение списка транзакций", description = "Возвращает все транзакции пользователя")
+    @Operation(summary = "Получить список транзакций", description = "Возвращает все транзакции пользователя")
     @ApiResponse(responseCode = "200", description = "Список транзакций успешно получен", content = @Content(
             mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = TransactionDto.class))
@@ -96,7 +95,7 @@ public class TransactionController {
             @Schema(implementation = ErrorDto.class)) })
     @GetMapping()
     public List<TransactionDto> getTransactions(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(hidden = true) HttpServletRequest request,
             @Parameter(hidden = true) HttpServletResponse response
@@ -134,15 +133,17 @@ public class TransactionController {
                                     schema = @Schema(type = "string", format = "binary")
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "Ошибка авторизации"),
+                    @ApiResponse(responseCode = "401", description = "Ошибка авторизации", content =
+                            {@Content(mediaType = "application/json", schema =
+                            @Schema(implementation = ErrorDto.class))}),
                     @ApiResponse(responseCode = "500", description = "Internal server error", content =
-                            { @Content(mediaType = "application/json", schema =
+                            {@Content(mediaType = "application/json", schema =
                             @Schema(implementation = ErrorDto.class)) })
             }
     )
     @GetMapping("/download")
     public ResponseEntity<InputStreamResource> download(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(hidden = true) HttpServletRequest request
     ) throws JsonProcessingException {
@@ -181,15 +182,12 @@ public class TransactionController {
 
     @Operation(summary = "Получить данные для дашборда", description = "Возвращает агрегированные данные по фильтру")
     @ApiResponse(responseCode = "200", description = "Данные дашборда успешно получены")
-    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
-            { @Content(mediaType = "application/json", schema =
-            @Schema(implementation = ErrorDto.class)) })
     @ApiResponse(responseCode = "500", description = "Internal server error", content =
             { @Content(mediaType = "application/json", schema =
             @Schema(implementation = ErrorDto.class)) })
     @PostMapping("/dashboard")
     public DashboardDto getDashboard(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(description = "Фильтр транзакций", required = true, example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
             @RequestBody TransactionFilterDto dto,
@@ -222,7 +220,10 @@ public class TransactionController {
             mediaType = "application/json",
             schema = @Schema(implementation = TransactionDto.class)
     ))
-    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
+    @ApiResponse(responseCode = "404", description = "Не найдена транзакция", content =
+            {@Content(mediaType = "application/json", schema =
+            @Schema(implementation = ErrorDto.class))})
+    @ApiResponse(responseCode = "422", description = "Транзакция не в статусе NEW", content =
             { @Content(mediaType = "application/json", schema =
             @Schema(implementation = ErrorDto.class)) })
     @ApiResponse(responseCode = "500", description = "Internal server error", content =
@@ -230,7 +231,7 @@ public class TransactionController {
             @Schema(implementation = ErrorDto.class)) })
     @PatchMapping()
     public TransactionDto update(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(description = "Обновленные данные транзакции", required = true, example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
             @RequestBody TransactionDto dto,
@@ -261,17 +262,14 @@ public class TransactionController {
     @Operation(summary = "Удалить транзакцию", description = "Удаляет транзакцию по её идентификатору")
     @ApiResponse(responseCode = "200", description = "Транзакция успешно удалена", content = @Content(
             mediaType = "application/json",
-            schema = @Schema(implementation = TransactionDto.class)
+            schema = @Schema(implementation = MessageDto.class)
     ))
-    @ApiResponse(responseCode = "422", description = "Ошибка парсинга тела json", content =
-            { @Content(mediaType = "application/json", schema =
-            @Schema(implementation = ErrorDto.class)) })
     @ApiResponse(responseCode = "500", description = "Internal server error", content =
             { @Content(mediaType = "application/json", schema =
             @Schema(implementation = ErrorDto.class)) })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+    public ResponseEntity<MessageDto> delete(
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(description = "Идентификатор транзакции", required = true, example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
             @PathVariable UUID id,
@@ -288,7 +286,7 @@ public class TransactionController {
 
         transactionService.delete(id);
 
-        String message = "Transaction '%s' deleted successfully".formatted(id);
+        MessageDto message = new MessageDto("Transaction '%s' deleted successfully".formatted(id));
 
         auditService.audit(auditService.prepareResponseAudit(
                 operUid,
@@ -301,7 +299,7 @@ public class TransactionController {
         return ResponseEntity.ok().body(message);
     }
 
-    @Operation(summary = "Получить статусы транзакций", description = "Возвращает статусы по транзакциям пользователя")
+    @Operation(summary = "Получить статусы транзакций", description = "Возвращает статусы состояний транзакции из справочника")
     @ApiResponse(responseCode = "200", description = "Статусы успешно получены", content = @Content(
             mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = TransactionStatusDto.class))
@@ -311,7 +309,7 @@ public class TransactionController {
             @Schema(implementation = ErrorDto.class)) })
     @GetMapping("/statuses")
     public List<TransactionStatusDto> getStatuses(
-            @Parameter(description = "Уникальный идентификатор оператора", required = true, example="9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(hidden = true) HttpServletRequest request,
             @Parameter(hidden = true) HttpServletResponse response

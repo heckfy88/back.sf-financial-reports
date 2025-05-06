@@ -33,7 +33,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final AuditService auditService;
 
-    @Operation(summary = "Получение списка категорий", description = "Возвращает все категории, созданные пользователем")
+    @Operation(summary = "Получить список категорий", description = "Возвращает все категории, созданные пользователем")
     @ApiResponse(responseCode = "200", description = "Список категорий успешно получен", content = @Content(
             mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class))
@@ -43,6 +43,7 @@ public class CategoryController {
             @Schema(implementation = ErrorDto.class)) })
     @GetMapping()
     public List<CategoryDto> getCategories(
+            @Parameter(description = "Уникальный идентификатор операции", required = true, example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
             @RequestHeader("operUid") UUID operUid,
             @Parameter(hidden = true) HttpServletRequest request,
             @Parameter(hidden = true) HttpServletResponse response

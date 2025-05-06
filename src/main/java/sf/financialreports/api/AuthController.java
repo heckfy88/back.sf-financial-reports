@@ -31,7 +31,7 @@ public class AuthController {
     private final AuditService auditService;
 
     @Operation(
-            summary = "Авторизация пользователя",
+            summary = "Авторизовать пользователя",
             description = "Авторизация пользователя с получением токена для дальнейших запросов.",
             responses = {
                     @ApiResponse(
@@ -63,7 +63,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(
             @Parameter(
-                    description = "Уникальный идентификатор оператора",
+                    description = "Уникальный идентификатор операции",
                     required = true,
                     example = "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e"
             )
