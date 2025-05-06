@@ -1,5 +1,9 @@
 package sf.financialreports.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +20,23 @@ import sf.financialreports.service.AuthenticationService;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+
+    @Operation(
+            summary = "Логин пользователя",
+            description = "Авторизация пользователя с получением токена для дальнейших запросов.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Успешный логин",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = TokenDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Неверный логин или пароль"),
+                    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            }
+    )
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginRequest) {
