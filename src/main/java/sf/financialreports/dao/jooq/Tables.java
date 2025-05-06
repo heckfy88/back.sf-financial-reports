@@ -4,8 +4,8 @@
 package sf.financialreports.dao.jooq;
 
 
+import sf.financialreports.dao.jooq.tables.Audit;
 import sf.financialreports.dao.jooq.tables.Category;
-import sf.financialreports.dao.jooq.tables.IntegrationLog;
 import sf.financialreports.dao.jooq.tables.Transaction;
 import sf.financialreports.dao.jooq.tables.User;
 
@@ -17,14 +17,14 @@ import sf.financialreports.dao.jooq.tables.User;
 public class Tables {
 
     /**
+     * The table <code>finances.audit</code>.
+     */
+    public static final Audit AUDIT = Audit.AUDIT;
+
+    /**
      * The table <code>finances.category</code>.
      */
     public static final Category CATEGORY = Category.CATEGORY;
-
-    /**
-     * The table <code>finances.integration_log</code>.
-     */
-    public static final IntegrationLog INTEGRATION_LOG = IntegrationLog.INTEGRATION_LOG;
 
     /**
      * The table <code>finances.transaction</code>.

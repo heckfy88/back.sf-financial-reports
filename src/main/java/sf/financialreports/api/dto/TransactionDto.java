@@ -1,5 +1,6 @@
 package sf.financialreports.api.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDto {
+    @Schema()
     private UUID id;
     private String date;
     private String description;
