@@ -24,47 +24,66 @@ import java.util.function.Function;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Audit extends TableImpl<AuditRecord> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The reference instance of <code>finances.audit</code>
      */
     public static final Audit AUDIT = new Audit();
-    private static final long serialVersionUID = 1L;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<AuditRecord> getRecordType() {
+        return AuditRecord.class;
+    }
+
     /**
      * The column <code>finances.audit.id</code>.
      */
     public final TableField<AuditRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("uuid_generate_v4()"), SQLDataType.UUID)), this, "");
+
     /**
      * The column <code>finances.audit.oper_uid</code>.
      */
     public final TableField<AuditRecord, UUID> OPER_UID = createField(DSL.name("oper_uid"), SQLDataType.UUID.nullable(false), this, "");
+
     /**
      * The column <code>finances.audit.user_id</code>.
      */
     public final TableField<AuditRecord, UUID> USER_ID = createField(DSL.name("user_id"), SQLDataType.UUID, this, "");
+
     /**
      * The column <code>finances.audit.message_type</code>.
      */
     public final TableField<AuditRecord, String> MESSAGE_TYPE = createField(DSL.name("message_type"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+
     /**
      * The column <code>finances.audit.request_type</code>.
      */
     public final TableField<AuditRecord, String> REQUEST_TYPE = createField(DSL.name("request_type"), SQLDataType.VARCHAR(100).nullable(false), this, "");
+
     /**
      * The column <code>finances.audit.request_path</code>.
      */
     public final TableField<AuditRecord, String> REQUEST_PATH = createField(DSL.name("request_path"), SQLDataType.VARCHAR(100).nullable(false), this, "");
+
     /**
      * The column <code>finances.audit.request_headers</code>.
      */
     public final TableField<AuditRecord, String> REQUEST_HEADERS = createField(DSL.name("request_headers"), SQLDataType.VARCHAR(1024).nullable(false), this, "");
+
     /**
      * The column <code>finances.audit.request_params</code>.
      */
     public final TableField<AuditRecord, String> REQUEST_PARAMS = createField(DSL.name("request_params"), SQLDataType.VARCHAR(255), this, "");
+
     /**
      * The column <code>finances.audit.payload</code>.
      */
     public final TableField<AuditRecord, String> PAYLOAD = createField(DSL.name("payload"), SQLDataType.VARCHAR, this, "");
+
     /**
      * The column <code>finances.audit.created_at</code>.
      */
@@ -101,14 +120,6 @@ public class Audit extends TableImpl<AuditRecord> {
 
     public <O extends Record> Audit(Table<O> child, ForeignKey<O, AuditRecord> key) {
         super(child, key, AUDIT);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<AuditRecord> getRecordType() {
-        return AuditRecord.class;
     }
 
     @Override

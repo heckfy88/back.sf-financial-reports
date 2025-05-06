@@ -4,12 +4,14 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.springframework.stereotype.Repository;
 import sf.financialreports.dao.domain.Category;
+import sf.financialreports.dao.domain.Transaction;
 import sf.financialreports.dao.jooq.enums.CategoryType;
 
 import java.util.List;
 import java.util.UUID;
 
 import static sf.financialreports.dao.jooq.Tables.CATEGORY;
+import static sf.financialreports.dao.jooq.tables.Transaction.TRANSACTION;
 
 @Repository
 public class CategoryRepository {
@@ -28,6 +30,13 @@ public class CategoryRepository {
             CATEGORY.TYPE,
             CATEGORY.CREATED_AT
     );
+
+    public List<Category> getCategories(UUID userId) {
+        return dslContext.select(CATEGORY_FIELDS)
+                .from(CATEGORY)
+                .where(CATEGORY.USER_ID.eq(userId))
+                .fetchInto(Category.class);
+    }
 
     public Category save(Category category) {
         Category existingCategory = findByNameAndUserId(category.getName(), category.getUserId());

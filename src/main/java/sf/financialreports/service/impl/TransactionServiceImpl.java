@@ -132,8 +132,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionStatusDto> getStatuses() {
-        // TODO: Valyok
-        return List.of();
+        User user = getUserFromToken();
+        return transactionRepository.getStatuses(user.getId()).stream().map(status ->
+                TransactionStatusDto.builder()
+                        .name(status.name())
+                        .title(status.getTitle())
+                        .weight(status.getWeight())
+                        .build()
+        ).toList();
     }
 
     private void validate(TransactionDto dto) {

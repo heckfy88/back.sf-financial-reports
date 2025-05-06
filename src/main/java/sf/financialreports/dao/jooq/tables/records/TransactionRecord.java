@@ -154,10 +154,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Create a detached TransactionRecord
+     * Setter for <code>finances.transaction.receiver_user_type</code>.
      */
-    public TransactionRecord() {
-        super(Transaction.TRANSACTION);
+    public void setReceiverUserType(UserType value) {
+        set(9, value);
     }
 
     /**
@@ -175,27 +175,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Create a detached, initialised TransactionRecord
+     * Getter for <code>finances.transaction.receiver_bank</code>.
      */
-    public TransactionRecord(UUID id, UUID userId, String categoryName, LocalDate date, String description, BigDecimal amount, TransactionStatus status, String senderBank, String senderAccount, UserType receiverUserType, String receiverBank, String receiverAccount, String receiverInn, String receiverPhone, LocalDateTime createdAt) {
-        super(Transaction.TRANSACTION);
-
-        setId(id);
-        setUserId(userId);
-        setCategoryName(categoryName);
-        setDate(date);
-        setDescription(description);
-        setAmount(amount);
-        setStatus(status);
-        setSenderBank(senderBank);
-        setSenderAccount(senderAccount);
-        setReceiverUserType(receiverUserType);
-        setReceiverBank(receiverBank);
-        setReceiverAccount(receiverAccount);
-        setReceiverInn(receiverInn);
-        setReceiverPhone(receiverPhone);
-        setCreatedAt(createdAt);
-        resetChangedOnNotNull();
+    public String getReceiverBank() {
+        return (String) get(10);
     }
 
     /**
@@ -220,10 +203,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Setter for <code>finances.transaction.receiver_user_type</code>.
+     * Getter for <code>finances.transaction.receiver_inn</code>.
      */
-    public void setReceiverUserType(UserType value) {
-        set(9, value);
+    public String getReceiverInn() {
+        return (String) get(12);
     }
 
     /**
@@ -234,24 +217,24 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_bank</code>.
-     */
-    public String getReceiverBank() {
-        return (String) get(10);
-    }
-
-    /**
-     * Getter for <code>finances.transaction.receiver_inn</code>.
-     */
-    public String getReceiverInn() {
-        return (String) get(12);
-    }
-
-    /**
      * Getter for <code>finances.transaction.receiver_phone</code>.
      */
     public String getReceiverPhone() {
         return (String) get(13);
+    }
+
+    /**
+     * Setter for <code>finances.transaction.created_at</code>.
+     */
+    public void setCreatedAt(LocalDateTime value) {
+        set(14, value);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.created_at</code>.
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(14);
     }
 
     // -------------------------------------------------------------------------
@@ -267,18 +250,14 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     // Record15 type implementation
     // -------------------------------------------------------------------------
 
-    /**
-     * Getter for <code>finances.transaction.created_at</code>.
-     */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(14);
+    @Override
+    public Row15<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, UserType, String, String, String, String, LocalDateTime> fieldsRow() {
+        return (Row15) super.fieldsRow();
     }
 
-    /**
-     * Setter for <code>finances.transaction.created_at</code>.
-     */
-    public void setCreatedAt(LocalDateTime value) {
-        set(14, value);
+    @Override
+    public Row15<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, UserType, String, String, String, String, LocalDateTime> valuesRow() {
+        return (Row15) super.valuesRow();
     }
 
     @Override
@@ -347,13 +326,13 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     @Override
-    public Row15<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, UserType, String, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row15) super.fieldsRow();
+    public Field<String> field14() {
+        return Transaction.TRANSACTION.RECEIVER_PHONE;
     }
 
     @Override
-    public Row15<UUID, UUID, String, LocalDate, String, BigDecimal, TransactionStatus, String, String, UserType, String, String, String, String, LocalDateTime> valuesRow() {
-        return (Row15) super.valuesRow();
+    public Field<LocalDateTime> field15() {
+        return Transaction.TRANSACTION.CREATED_AT;
     }
 
     @Override
@@ -422,13 +401,13 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     @Override
-    public Field<String> field14() {
-        return Transaction.TRANSACTION.RECEIVER_PHONE;
+    public String component14() {
+        return getReceiverPhone();
     }
 
     @Override
-    public Field<LocalDateTime> field15() {
-        return Transaction.TRANSACTION.CREATED_AT;
+    public LocalDateTime component15() {
+        return getCreatedAt();
     }
 
     @Override
@@ -497,12 +476,12 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     @Override
-    public String component14() {
+    public String value14() {
         return getReceiverPhone();
     }
 
     @Override
-    public LocalDateTime component15() {
+    public LocalDateTime value15() {
         return getCreatedAt();
     }
 
@@ -620,13 +599,34 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     // Constructors
     // -------------------------------------------------------------------------
 
-    @Override
-    public String value14() {
-        return getReceiverPhone();
+    /**
+     * Create a detached TransactionRecord
+     */
+    public TransactionRecord() {
+        super(Transaction.TRANSACTION);
     }
 
-    @Override
-    public LocalDateTime value15() {
-        return getCreatedAt();
+    /**
+     * Create a detached, initialised TransactionRecord
+     */
+    public TransactionRecord(UUID id, UUID userId, String categoryName, LocalDate date, String description, BigDecimal amount, TransactionStatus status, String senderBank, String senderAccount, UserType receiverUserType, String receiverBank, String receiverAccount, String receiverInn, String receiverPhone, LocalDateTime createdAt) {
+        super(Transaction.TRANSACTION);
+
+        setId(id);
+        setUserId(userId);
+        setCategoryName(categoryName);
+        setDate(date);
+        setDescription(description);
+        setAmount(amount);
+        setStatus(status);
+        setSenderBank(senderBank);
+        setSenderAccount(senderAccount);
+        setReceiverUserType(receiverUserType);
+        setReceiverBank(receiverBank);
+        setReceiverAccount(receiverAccount);
+        setReceiverInn(receiverInn);
+        setReceiverPhone(receiverPhone);
+        setCreatedAt(createdAt);
+        resetChangedOnNotNull();
     }
 }
