@@ -18,6 +18,6 @@ public class DashboardDto {
     private ComparisonStatDto incomeVsExpense;
     private StatusCountDto statusCount;
     private BankStatDto bankStat;
-    private CategoryStatDto categoryStat;
+    private CategoryStatsReportDto categoryStat;
 }
 

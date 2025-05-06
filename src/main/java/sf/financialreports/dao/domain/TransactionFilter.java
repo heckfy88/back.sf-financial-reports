@@ -11,23 +11,23 @@ import java.util.List;
 @Builder
 @Data
 public class TransactionFilter {
-    private List<String> senderBank;
-    private List<String> receiverBank;
-    private List<String> status;
+    private List<String> senderBanks;
+    private List<String> receiverBanks;
+    private List<String> statuses;
     private String inn;
     private LocalDate dateFrom;
     private LocalDate dateTo;
     private LocalDate specificDate;
     private BigDecimal amountFrom;
     private BigDecimal amountTo;
-    private String categoryType; // INCOME or EXPENSE
-    private List<String> categoryName;
+    private CategoryType categoryType;
+    private List<String> categoryNames;
 
     public static TransactionFilter from(TransactionFilterDto dto) {
         return new TransactionFilter(
-                dto.getSenderBank(),
-                dto.getReceiverBank(),
-                dto.getStatus(),
+                dto.getSenderBanks(),
+                dto.getReceiverBanks(),
+                dto.getStatuses(),
                 dto.getInn(),
                 dto.getDateFrom(),
                 dto.getDateTo(),
@@ -35,7 +35,7 @@ public class TransactionFilter {
                 dto.getAmountFrom(),
                 dto.getAmountTo(),
                 dto.getCategoryType(),
-                dto.getCategoryName()
+                dto.getCategoryNames()
         );
     }
 }

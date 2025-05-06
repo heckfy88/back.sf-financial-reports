@@ -34,3 +34,5 @@ create table finances.transaction
     constraint fk_user_id foreign key (user_id) references finances.user (id),
     constraint transaction_category_fkey foreign key (user_id, category_name) references finances.category (user_id, name)
 );
+
+create index idx_transaction_user_id on finances.transaction (user_id);
