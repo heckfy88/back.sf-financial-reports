@@ -9,4 +9,5 @@
     <include file="init/2_add_category_table.sql" relativeToChangelogFile="true" />
     <include file="init/3_add_transaction_table.sql" relativeToChangelogFile="true" />
     <include file="init/4_add_audit_table.sql" relativeToChangelogFile="true"/>
+    <include file="init/05_add_data.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
