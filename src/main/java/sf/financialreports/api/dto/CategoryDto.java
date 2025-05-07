@@ -12,7 +12,10 @@ import java.util.UUID;
 @Data
 @Schema(description = "Категория транзакции")
 public class CategoryDto {
-    @Schema(description = "Идентификатор категории", example = "d1a78e9b-cbd9-4f6b-b614-5c9c2f5153ba")
+    @Schema(description = "Идентификатор категории",
+            example = "d1a78e9b-cbd9-4f6b-b614-5c9c2f5153ba",
+            accessMode = Schema.AccessMode.READ_ONLY
+    )
     private UUID id;
     @Schema(description = "Название категории", example = "Зарплата")
     private String name;
