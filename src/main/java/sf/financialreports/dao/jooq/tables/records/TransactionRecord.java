@@ -28,13 +28,6 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     private static final long serialVersionUID = 1L;
 
     /**
-     * Getter for <code>finances.transaction.id</code>. Идентификатор транзакции
-     */
-    public UUID getId() {
-        return (UUID) get(0);
-    }
-
-    /**
      * Setter for <code>finances.transaction.id</code>. Идентификатор транзакции
      */
     public void setId(UUID value) {
@@ -42,11 +35,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.user_id</code>. Идентификатор
-     * пользователя
+     * Getter for <code>finances.transaction.id</code>. Идентификатор транзакции
      */
-    public UUID getUserId() {
-        return (UUID) get(1);
+    public UUID getId() {
+        return (UUID) get(0);
     }
 
     /**
@@ -58,11 +50,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.category_name</code>. Идентификатор
-     * категории
+     * Getter for <code>finances.transaction.user_id</code>. Идентификатор
+     * пользователя
      */
-    public String getCategoryName() {
-        return (String) get(2);
+    public UUID getUserId() {
+        return (UUID) get(1);
     }
 
     /**
@@ -74,11 +66,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.date</code>. Дата совершения
-     * транзакции
+     * Getter for <code>finances.transaction.category_name</code>. Идентификатор
+     * категории
      */
-    public LocalDate getDate() {
-        return (LocalDate) get(3);
+    public String getCategoryName() {
+        return (String) get(2);
     }
 
     /**
@@ -90,11 +82,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.description</code>. Описание
+     * Getter for <code>finances.transaction.date</code>. Дата совершения
      * транзакции
      */
-    public String getDescription() {
-        return (String) get(4);
+    public LocalDate getDate() {
+        return (LocalDate) get(3);
     }
 
     /**
@@ -106,10 +98,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.amount</code>. Сумма транзакции
+     * Getter for <code>finances.transaction.description</code>. Описание
+     * транзакции
      */
-    public BigDecimal getAmount() {
-        return (BigDecimal) get(5);
+    public String getDescription() {
+        return (String) get(4);
     }
 
     /**
@@ -120,10 +113,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.status</code>. Статус транзакции
+     * Getter for <code>finances.transaction.amount</code>. Сумма транзакции
      */
-    public TransactionStatus getStatus() {
-        return (TransactionStatus) get(6);
+    public BigDecimal getAmount() {
+        return (BigDecimal) get(5);
     }
 
     /**
@@ -134,11 +127,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.sender_bank</code>. Название
-     * банка-отправителя
+     * Getter for <code>finances.transaction.status</code>. Статус транзакции
      */
-    public String getSenderBank() {
-        return (String) get(7);
+    public TransactionStatus getStatus() {
+        return (TransactionStatus) get(6);
     }
 
     /**
@@ -150,11 +142,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.sender_account</code>. Счет
-     * отправителя
+     * Getter for <code>finances.transaction.sender_bank</code>. Название
+     * банка-отправителя
      */
-    public String getSenderAccount() {
-        return (String) get(8);
+    public String getSenderBank() {
+        return (String) get(7);
     }
 
     /**
@@ -166,11 +158,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_user_type</code>. Тип
-     * получателя
+     * Getter for <code>finances.transaction.sender_account</code>. Счет
+     * отправителя
      */
-    public UserType getReceiverUserType() {
-        return (UserType) get(9);
+    public String getSenderAccount() {
+        return (String) get(8);
     }
 
     /**
@@ -182,11 +174,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_bank</code>. Название
-     * банка-получателя
+     * Getter for <code>finances.transaction.receiver_user_type</code>. Тип
+     * получателя
      */
-    public String getReceiverBank() {
-        return (String) get(10);
+    public UserType getReceiverUserType() {
+        return (UserType) get(9);
     }
 
     /**
@@ -198,11 +190,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_account</code>. Счет
-     * получателя
+     * Getter for <code>finances.transaction.receiver_bank</code>. Название
+     * банка-получателя
      */
-    public String getReceiverAccount() {
-        return (String) get(11);
+    public String getReceiverBank() {
+        return (String) get(10);
     }
 
     /**
@@ -214,10 +206,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_inn</code>. ИНН получателя
+     * Getter for <code>finances.transaction.receiver_account</code>. Счет
+     * получателя
      */
-    public String getReceiverInn() {
-        return (String) get(12);
+    public String getReceiverAccount() {
+        return (String) get(11);
     }
 
     /**
@@ -228,11 +221,10 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.receiver_phone</code>. Номер
-     * телефона получателя
+     * Getter for <code>finances.transaction.receiver_inn</code>. ИНН получателя
      */
-    public String getReceiverPhone() {
-        return (String) get(13);
+    public String getReceiverInn() {
+        return (String) get(12);
     }
 
     /**
@@ -244,11 +236,11 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
     }
 
     /**
-     * Getter for <code>finances.transaction.created_at</code>. Дата создания
-     * транзакции
+     * Getter for <code>finances.transaction.receiver_phone</code>. Номер
+     * телефона получателя
      */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(14);
+    public String getReceiverPhone() {
+        return (String) get(13);
     }
 
     /**
@@ -257,6 +249,14 @@ public class TransactionRecord extends UpdatableRecordImpl<TransactionRecord> im
      */
     public void setCreatedAt(LocalDateTime value) {
         set(14, value);
+    }
+
+    /**
+     * Getter for <code>finances.transaction.created_at</code>. Дата создания
+     * транзакции
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(14);
     }
 
     // -------------------------------------------------------------------------

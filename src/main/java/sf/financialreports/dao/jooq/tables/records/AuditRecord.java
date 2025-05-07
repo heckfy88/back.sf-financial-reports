@@ -24,10 +24,25 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     private static final long serialVersionUID = 1L;
 
     /**
+     * Setter for <code>finances.audit.id</code>. Идентификатор записи
+     */
+    public void setId(UUID value) {
+        set(0, value);
+    }
+
+    /**
      * Create a detached AuditRecord
      */
     public AuditRecord() {
         super(Audit.AUDIT);
+    }
+
+    /**
+     * Setter for <code>finances.audit.oper_uid</code>. Уникальный идентификатор
+     * операции
+     */
+    public void setOperUid(UUID value) {
+        set(1, value);
     }
 
     /**
@@ -57,10 +72,11 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.id</code>. Идентификатор записи
+     * Getter for <code>finances.audit.user_id</code>. Идентификатор
+     * пользователя
      */
-    public void setId(UUID value) {
-        set(0, value);
+    public UUID getUserId() {
+        return (UUID) get(2);
     }
 
     /**
@@ -72,19 +88,17 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.oper_uid</code>. Уникальный идентификатор
-     * операции
+     * Getter for <code>finances.audit.message_type</code>. Тип сообщения
      */
-    public void setOperUid(UUID value) {
-        set(1, value);
+    public String getMessageType() {
+        return (String) get(3);
     }
 
     /**
-     * Getter for <code>finances.audit.user_id</code>. Идентификатор
-     * пользователя
+     * Setter for <code>finances.audit.request_type</code>. Тип запроса
      */
-    public UUID getUserId() {
-        return (UUID) get(2);
+    public void setRequestType(String value) {
+        set(4, value);
     }
 
     /**
@@ -96,10 +110,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.message_type</code>. Тип сообщения
+     * Setter for <code>finances.audit.request_path</code>. Путь запроса
      */
-    public String getMessageType() {
-        return (String) get(3);
+    public void setRequestPath(String value) {
+        set(5, value);
     }
 
     /**
@@ -117,10 +131,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.request_type</code>. Тип запроса
+     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
      */
-    public void setRequestType(String value) {
-        set(4, value);
+    public String getRequestHeaders() {
+        return (String) get(6);
     }
 
     /**
@@ -131,17 +145,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.request_path</code>. Путь запроса
+     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
      */
-    public void setRequestPath(String value) {
-        set(5, value);
-    }
-
-    /**
-     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
-     */
-    public String getRequestHeaders() {
-        return (String) get(6);
+    public String getRequestParams() {
+        return (String) get(7);
     }
 
     /**
@@ -152,10 +159,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
+     * Getter for <code>finances.audit.payload</code>. Тело запроса
      */
-    public String getRequestParams() {
-        return (String) get(7);
+    public String getPayload() {
+        return (String) get(8);
     }
 
     /**
@@ -163,13 +170,6 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
      */
     public void setRequestParams(String value) {
         set(7, value);
-    }
-
-    /**
-     * Getter for <code>finances.audit.payload</code>. Тело запроса
-     */
-    public String getPayload() {
-        return (String) get(8);
     }
 
     /**
