@@ -46,6 +46,22 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
+     * Getter for <code>finances.audit.oper_uid</code>. Уникальный идентификатор
+     * операции
+     */
+    public UUID getOperUid() {
+        return (UUID) get(1);
+    }
+
+    /**
+     * Setter for <code>finances.audit.user_id</code>. Идентификатор
+     * пользователя
+     */
+    public void setUserId(UUID value) {
+        set(2, value);
+    }
+
+    /**
      * Create a detached, initialised AuditRecord
      */
     public AuditRecord(UUID id, UUID operUid, UUID userId, String messageType, String requestType, String requestPath, String requestHeaders, String requestParams, String payload, LocalDateTime createdAt) {
@@ -65,6 +81,13 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
+     * Setter for <code>finances.audit.message_type</code>. Тип сообщения
+     */
+    public void setMessageType(String value) {
+        set(3, value);
+    }
+
+    /**
      * Getter for <code>finances.audit.id</code>. Идентификатор записи
      */
     public UUID getId() {
@@ -80,11 +103,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.oper_uid</code>. Уникальный идентификатор
-     * операции
+     * Getter for <code>finances.audit.request_type</code>. Тип запроса
      */
-    public UUID getOperUid() {
-        return (UUID) get(1);
+    public String getRequestType() {
+        return (String) get(4);
     }
 
     /**
@@ -95,60 +117,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.request_type</code>. Тип запроса
-     */
-    public void setRequestType(String value) {
-        set(4, value);
-    }
-
-    /**
-     * Setter for <code>finances.audit.user_id</code>. Идентификатор
-     * пользователя
-     */
-    public void setUserId(UUID value) {
-        set(2, value);
-    }
-
-    /**
-     * Setter for <code>finances.audit.request_path</code>. Путь запроса
-     */
-    public void setRequestPath(String value) {
-        set(5, value);
-    }
-
-    /**
-     * Setter for <code>finances.audit.message_type</code>. Тип сообщения
-     */
-    public void setMessageType(String value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>finances.audit.request_type</code>. Тип запроса
-     */
-    public String getRequestType() {
-        return (String) get(4);
-    }
-
-    /**
-     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
-     */
-    public String getRequestHeaders() {
-        return (String) get(6);
-    }
-
-    /**
      * Getter for <code>finances.audit.request_path</code>. Путь запроса
      */
     public String getRequestPath() {
         return (String) get(5);
-    }
-
-    /**
-     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
-     */
-    public String getRequestParams() {
-        return (String) get(7);
     }
 
     /**
@@ -159,10 +131,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.payload</code>. Тело запроса
+     * Setter for <code>finances.audit.request_type</code>. Тип запроса
      */
-    public String getPayload() {
-        return (String) get(8);
+    public void setRequestType(String value) {
+        set(4, value);
     }
 
     /**
@@ -173,10 +145,38 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
+     * Setter for <code>finances.audit.request_path</code>. Путь запроса
+     */
+    public void setRequestPath(String value) {
+        set(5, value);
+    }
+
+    /**
      * Setter for <code>finances.audit.payload</code>. Тело запроса
      */
     public void setPayload(String value) {
         set(8, value);
+    }
+
+    /**
+     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
+     */
+    public String getRequestHeaders() {
+        return (String) get(6);
+    }
+
+    /**
+     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
+     */
+    public String getRequestParams() {
+        return (String) get(7);
+    }
+
+    /**
+     * Getter for <code>finances.audit.payload</code>. Тело запроса
+     */
+    public String getPayload() {
+        return (String) get(8);
     }
 
     // -------------------------------------------------------------------------
