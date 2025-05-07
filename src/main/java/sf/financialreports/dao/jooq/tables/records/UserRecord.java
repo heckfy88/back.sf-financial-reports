@@ -25,13 +25,6 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     private static final long serialVersionUID = 1L;
 
     /**
-     * Getter for <code>finances.user.id</code>. Идентификатор пользователя
-     */
-    public UUID getId() {
-        return (UUID) get(0);
-    }
-
-    /**
      * Setter for <code>finances.user.id</code>. Идентификатор пользователя
      */
     public void setId(UUID value) {
@@ -39,10 +32,10 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.name</code>. Имя пользователя
+     * Getter for <code>finances.user.id</code>. Идентификатор пользователя
      */
-    public String getName() {
-        return (String) get(1);
+    public UUID getId() {
+        return (UUID) get(0);
     }
 
     /**
@@ -53,11 +46,10 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.email</code>. Электронная почта
-     * пользователя
+     * Getter for <code>finances.user.name</code>. Имя пользователя
      */
-    public String getEmail() {
-        return (String) get(2);
+    public String getName() {
+        return (String) get(1);
     }
 
     /**
@@ -69,11 +61,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.password_hash</code>. Хэш пароля
+     * Getter for <code>finances.user.email</code>. Электронная почта
      * пользователя
      */
-    public String getPasswordHash() {
-        return (String) get(3);
+    public String getEmail() {
+        return (String) get(2);
     }
 
     /**
@@ -85,11 +77,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.type</code>. Тип пользователя (физическое
-     * лицо или юридическое лицо)
+     * Getter for <code>finances.user.password_hash</code>. Хэш пароля
+     * пользователя
      */
-    public UserType getType() {
-        return (UserType) get(4);
+    public String getPasswordHash() {
+        return (String) get(3);
     }
 
     /**
@@ -101,11 +93,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.created_at</code>. Дата создания
-     * пользователя
+     * Getter for <code>finances.user.type</code>. Тип пользователя (физическое
+     * лицо или юридическое лицо)
      */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(5);
+    public UserType getType() {
+        return (UserType) get(4);
     }
 
     /**
@@ -117,10 +109,11 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
     }
 
     /**
-     * Getter for <code>finances.user.is_active</code>. Активность пользователя
+     * Getter for <code>finances.user.created_at</code>. Дата создания
+     * пользователя
      */
-    public Boolean getIsActive() {
-        return (Boolean) get(6);
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(5);
     }
 
     /**
@@ -128,6 +121,13 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
      */
     public void setIsActive(Boolean value) {
         set(6, value);
+    }
+
+    /**
+     * Getter for <code>finances.user.is_active</code>. Активность пользователя
+     */
+    public Boolean getIsActive() {
+        return (Boolean) get(6);
     }
 
     // -------------------------------------------------------------------------

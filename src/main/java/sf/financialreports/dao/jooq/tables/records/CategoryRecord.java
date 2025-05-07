@@ -25,13 +25,6 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     private static final long serialVersionUID = 1L;
 
     /**
-     * Getter for <code>finances.category.id</code>. Идентификатор категории
-     */
-    public UUID getId() {
-        return (UUID) get(0);
-    }
-
-    /**
      * Setter for <code>finances.category.id</code>. Идентификатор категории
      */
     public void setId(UUID value) {
@@ -39,11 +32,10 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     }
 
     /**
-     * Getter for <code>finances.category.user_id</code>. Идентификатор
-     * пользователя
+     * Getter for <code>finances.category.id</code>. Идентификатор категории
      */
-    public UUID getUserId() {
-        return (UUID) get(1);
+    public UUID getId() {
+        return (UUID) get(0);
     }
 
     /**
@@ -55,10 +47,11 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     }
 
     /**
-     * Getter for <code>finances.category.name</code>. Название категории
+     * Getter for <code>finances.category.user_id</code>. Идентификатор
+     * пользователя
      */
-    public String getName() {
-        return (String) get(2);
+    public UUID getUserId() {
+        return (UUID) get(1);
     }
 
     /**
@@ -69,10 +62,10 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     }
 
     /**
-     * Getter for <code>finances.category.description</code>. Описание категории
+     * Getter for <code>finances.category.name</code>. Название категории
      */
-    public String getDescription() {
-        return (String) get(3);
+    public String getName() {
+        return (String) get(2);
     }
 
     /**
@@ -83,10 +76,10 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     }
 
     /**
-     * Getter for <code>finances.category.type</code>. Тип категории
+     * Getter for <code>finances.category.description</code>. Описание категории
      */
-    public CategoryType getType() {
-        return (CategoryType) get(4);
+    public String getDescription() {
+        return (String) get(3);
     }
 
     /**
@@ -97,11 +90,10 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     }
 
     /**
-     * Getter for <code>finances.category.created_at</code>. Дата создания
-     * категории
+     * Getter for <code>finances.category.type</code>. Тип категории
      */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(5);
+    public CategoryType getType() {
+        return (CategoryType) get(4);
     }
 
     /**
@@ -110,6 +102,14 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
      */
     public void setCreatedAt(LocalDateTime value) {
         set(5, value);
+    }
+
+    /**
+     * Getter for <code>finances.category.created_at</code>. Дата создания
+     * категории
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(5);
     }
 
     // -------------------------------------------------------------------------

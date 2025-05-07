@@ -6,7 +6,6 @@ package sf.financialreports.dao.jooq.tables;
 
 import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.User;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;

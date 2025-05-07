@@ -74,7 +74,7 @@ public class Audit extends TableImpl<AuditRecord> {
     /**
      * The column <code>finances.audit.request_headers</code>. Заголовки запроса
      */
-    public final TableField<AuditRecord, String> REQUEST_HEADERS = createField(DSL.name("request_headers"), SQLDataType.VARCHAR(1024).nullable(false), this, "Заголовки запроса");
+    public final TableField<AuditRecord, String> REQUEST_HEADERS = createField(DSL.name("request_headers"), SQLDataType.VARCHAR.nullable(false), this, "Заголовки запроса");
 
     /**
      * The column <code>finances.audit.request_params</code>. Параметры запроса
