@@ -61,7 +61,14 @@ class TransactionControllerIT extends AbstractIntegrationClass {
         createTransactionFail(status().is5xxServerError());
     }
 
-    @DisplayName("Успешное обновление транзакции - транзакция не найдена")
+    @DisplayName("Успешное обновление транзакции")
+    @Test
+    @Sql("/sql/delete_update_transactions.sql")
+    void updateTransction_success() throws Exception {
+        updateTransactionSuccess(status().isOk());
+    }
+
+    @DisplayName("Неуспешное обновление транзакции - транзакция не найдена")
     @Test
     void updateTransction_notFound() throws Exception {
         updateTransactionNotFound(status().isNotFound());
@@ -114,6 +121,41 @@ class TransactionControllerIT extends AbstractIntegrationClass {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"id\": \"44444444-4444-4444-4444-444444444444\",\n" +
+                                "  \"category\": {\n" +
+                                "    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n" +
+                                "    \"name\": \"Зарплата\",\n" +
+                                "    \"description\": \"Регулярный доход от работодателя\",\n" +
+                                "    \"type\": \"INCOME\"\n" +
+                                "  },\n" +
+                                "  \"date\": \"2024.12.01\",\n" +
+                                "  \"description\": \"Оплата услуг связи\",\n" +
+                                "  \"amount\": 1500.75,\n" +
+                                "  \"status\": {\n" +
+                                "    \"name\": \"CONFIRMED\",\n" +
+                                "    \"title\": \"Подтвержденная\",\n" +
+                                "    \"weight\": 100\n" +
+                                "  },\n" +
+                                "  \"senderBank\": \"Сбербанк\",\n" +
+                                "  \"senderAccount\": \"40817810099910000000\",\n" +
+                                "  \"receiverUserType\": \"LEGAL\",\n" +
+                                "  \"receiverBank\": \"Тинькофф\",\n" +
+                                "  \"receiverAccount\": \"40702810900000000000\",\n" +
+                                "  \"receiverInn\": \"77070838993\",\n" +
+                                "  \"receiverPhone\": \"+79991234567\"\n" +
+                                "}")
+                ).andExpect(expectedStatus)
+                .andDo(print())
+                .andReturn()
+                .getResponse().getContentAsString();
+    }
+
+    private String updateTransactionSuccess(ResultMatcher expectedStatus) throws Exception {
+        return mvc.perform(patch("/api/v1/transactions")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer " + tokenDto.getToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "  \"id\": \"1b544a13-eef4-4a06-af51-b5df572157d7\",\n" +
                                 "  \"category\": {\n" +
                                 "    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n" +
                                 "    \"name\": \"Зарплата\",\n" +

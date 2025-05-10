@@ -1,4 +1,6 @@
 package sf.financialreports.integration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import sf.financialreports.AbstractIntegrationClass;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +21,19 @@ class TransactionDeleteControllerIT extends AbstractIntegrationClass {
         postgresContainer.start();
     }
 
+    @DisplayName("Удаление валидной транзакции")
+    @Test
+    @Sql("/sql/delete_update_transactions.sql")
+    void deleteTransaction_success() throws Exception {
+
+        mvc.perform(delete("/api/v1/transactions/6fea80df-10dd-4dcd-a85b-5cc6e668df2d")
+                        .header("operUid", UUID.randomUUID().toString())
+                        .header("Authorization", "Bearer " + tokenDto.getToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+
     @DisplayName("Ошибка удаление невалидной транзакции")
     @Test
     void deleteTransaction_fail() throws Exception {
@@ -29,6 +44,8 @@ class TransactionDeleteControllerIT extends AbstractIntegrationClass {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+
 
     @DisplayName("Удаление транзакции неавторизованным пользователем")
     @Test
