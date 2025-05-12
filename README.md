@@ -33,7 +33,8 @@
 
 ## Демонстрация работы приложения
 
-[Демонстрация работы приложения](https://cloud.mail.ru/public/MYZU/ryvNcmFsK)
+[Демонстрация работы приложения на фронте](https://cloud.mail.ru/public/cCAk/vTGegzEpo)  
+[Демонстрация работы приложения в сваггере(питч)](https://cloud.mail.ru/public/MYZU/ryvNcmFsK)
 
 ## Архитектура приложения
 

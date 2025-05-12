@@ -133,7 +133,7 @@ public class Transaction extends TableImpl<TransactionRecord> {
     /**
      * The column <code>finances.transaction.receiver_inn</code>. ИНН получателя
      */
-    public final TableField<TransactionRecord, String> RECEIVER_INN = createField(DSL.name("receiver_inn"), SQLDataType.VARCHAR(12), this, "ИНН получателя");
+    public final TableField<TransactionRecord, String> RECEIVER_INN = createField(DSL.name("receiver_inn"), SQLDataType.VARCHAR(11), this, "ИНН получателя");
 
     /**
      * The column <code>finances.transaction.receiver_phone</code>. Номер

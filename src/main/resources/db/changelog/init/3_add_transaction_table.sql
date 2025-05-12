@@ -26,7 +26,7 @@ create table finances.transaction
     receiver_user_type finances.user_type not null,
     receiver_bank    varchar(100),
     receiver_account varchar(30),
-    receiver_inn     varchar(12),
+    receiver_inn     varchar(11),
     receiver_phone   varchar(20),
     created_at       timestamp default now(),
 
