@@ -269,7 +269,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
     }
 
-    public BankStatDto aggregateBankStats(List<Transaction> transactions) {
+    private BankStatDto aggregateBankStats(List<Transaction> transactions) {
         Map<String, Long> senderStats = transactions.stream()
                 .filter(t -> t.getSenderBank() != null && !t.getSenderBank().isBlank())
                 .collect(Collectors.groupingBy(Transaction::getSenderBank, Collectors.counting()));

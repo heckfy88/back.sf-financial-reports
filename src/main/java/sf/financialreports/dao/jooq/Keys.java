@@ -9,6 +9,7 @@ import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
+
 import sf.financialreports.dao.jooq.tables.Audit;
 import sf.financialreports.dao.jooq.tables.Category;
 import sf.financialreports.dao.jooq.tables.Transaction;
@@ -30,7 +31,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<AuditRecord> PK_AUDIT = Internal.createUniqueKey(Audit.AUDIT, DSL.name("pk_audit"), new TableField[]{Audit.AUDIT.ID}, true);
+    public static final UniqueKey<AuditRecord> PK_AUDIT = Internal.createUniqueKey(Audit.AUDIT, DSL.name("pk_audit"), new TableField[] { Audit.AUDIT.ID }, true);
     public static final UniqueKey<CategoryRecord> PK_CATEGORY = Internal.createUniqueKey(Category.CATEGORY, DSL.name("pk_category"), new TableField[] { Category.CATEGORY.ID }, true);
     public static final UniqueKey<CategoryRecord> UNIQUE_CATEGORY_NAME = Internal.createUniqueKey(Category.CATEGORY, DSL.name("unique_category_name"), new TableField[] { Category.CATEGORY.USER_ID, Category.CATEGORY.NAME }, true);
     public static final UniqueKey<TransactionRecord> PK_TRANSACTION = Internal.createUniqueKey(Transaction.TRANSACTION, DSL.name("pk_transaction"), new TableField[] { Transaction.TRANSACTION.ID }, true);

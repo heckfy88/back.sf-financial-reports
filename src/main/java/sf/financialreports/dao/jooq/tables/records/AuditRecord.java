@@ -4,21 +4,22 @@
 package sf.financialreports.dao.jooq.tables.records;
 
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
-import sf.financialreports.dao.jooq.tables.Audit;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import sf.financialreports.dao.jooq.tables.Audit;
 
 
 /**
  * Аудит сервиса
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Record10<UUID, UUID, UUID, String, String, String, String, String, String, LocalDateTime> {
 
     private static final long serialVersionUID = 1L;
@@ -31,10 +32,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Create a detached AuditRecord
+     * Getter for <code>finances.audit.id</code>. Идентификатор записи
      */
-    public AuditRecord() {
-        super(Audit.AUDIT);
+    public UUID getId() {
+        return (UUID) get(0);
     }
 
     /**
@@ -62,22 +63,11 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Create a detached, initialised AuditRecord
+     * Getter for <code>finances.audit.user_id</code>. Идентификатор
+     * пользователя
      */
-    public AuditRecord(UUID id, UUID operUid, UUID userId, String messageType, String requestType, String requestPath, String requestHeaders, String requestParams, String payload, LocalDateTime createdAt) {
-        super(Audit.AUDIT);
-
-        setId(id);
-        setOperUid(operUid);
-        setUserId(userId);
-        setMessageType(messageType);
-        setRequestType(requestType);
-        setRequestPath(requestPath);
-        setRequestHeaders(requestHeaders);
-        setRequestParams(requestParams);
-        setPayload(payload);
-        setCreatedAt(createdAt);
-        resetChangedOnNotNull();
+    public UUID getUserId() {
+        return (UUID) get(2);
     }
 
     /**
@@ -88,18 +78,17 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.id</code>. Идентификатор записи
+     * Getter for <code>finances.audit.message_type</code>. Тип сообщения
      */
-    public UUID getId() {
-        return (UUID) get(0);
+    public String getMessageType() {
+        return (String) get(3);
     }
 
     /**
-     * Getter for <code>finances.audit.user_id</code>. Идентификатор
-     * пользователя
+     * Setter for <code>finances.audit.request_type</code>. Тип запроса
      */
-    public UUID getUserId() {
-        return (UUID) get(2);
+    public void setRequestType(String value) {
+        set(4, value);
     }
 
     /**
@@ -110,10 +99,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.message_type</code>. Тип сообщения
+     * Setter for <code>finances.audit.request_path</code>. Путь запроса
      */
-    public String getMessageType() {
-        return (String) get(3);
+    public void setRequestPath(String value) {
+        set(5, value);
     }
 
     /**
@@ -131,10 +120,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.request_type</code>. Тип запроса
+     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
      */
-    public void setRequestType(String value) {
-        set(4, value);
+    public String getRequestHeaders() {
+        return (String) get(6);
     }
 
     /**
@@ -145,10 +134,10 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Setter for <code>finances.audit.request_path</code>. Путь запроса
+     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
      */
-    public void setRequestPath(String value) {
-        set(5, value);
+    public String getRequestParams() {
+        return (String) get(7);
     }
 
     /**
@@ -159,24 +148,24 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     }
 
     /**
-     * Getter for <code>finances.audit.request_headers</code>. Заголовки запроса
-     */
-    public String getRequestHeaders() {
-        return (String) get(6);
-    }
-
-    /**
-     * Getter for <code>finances.audit.request_params</code>. Параметры запроса
-     */
-    public String getRequestParams() {
-        return (String) get(7);
-    }
-
-    /**
      * Getter for <code>finances.audit.payload</code>. Тело запроса
      */
     public String getPayload() {
         return (String) get(8);
+    }
+
+    /**
+     * Setter for <code>finances.audit.created_at</code>. Дата создания записи
+     */
+    public void setCreatedAt(LocalDateTime value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>finances.audit.created_at</code>. Дата создания записи
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(9);
     }
 
     // -------------------------------------------------------------------------
@@ -432,16 +421,28 @@ public class AuditRecord extends UpdatableRecordImpl<AuditRecord> implements Rec
     // -------------------------------------------------------------------------
 
     /**
-     * Getter for <code>finances.audit.created_at</code>. Дата создания записи
+     * Create a detached AuditRecord
      */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(9);
+    public AuditRecord() {
+        super(Audit.AUDIT);
     }
 
     /**
-     * Setter for <code>finances.audit.created_at</code>. Дата создания записи
+     * Create a detached, initialised AuditRecord
      */
-    public void setCreatedAt(LocalDateTime value) {
-        set(9, value);
+    public AuditRecord(UUID id, UUID operUid, UUID userId, String messageType, String requestType, String requestPath, String requestHeaders, String requestParams, String payload, LocalDateTime createdAt) {
+        super(Audit.AUDIT);
+
+        setId(id);
+        setOperUid(operUid);
+        setUserId(userId);
+        setMessageType(messageType);
+        setRequestType(requestType);
+        setRequestPath(requestPath);
+        setRequestHeaders(requestHeaders);
+        setRequestParams(requestParams);
+        setPayload(payload);
+        setCreatedAt(createdAt);
+        resetChangedOnNotNull();
     }
 }

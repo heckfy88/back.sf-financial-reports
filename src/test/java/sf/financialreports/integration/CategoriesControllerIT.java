@@ -16,8 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class CategoriesControllerIT extends AbstractIntegrationClass {
 
-   // @Transactional
-   // @Sql("/sql/get_transactions.sql")
+
     @DisplayName("Успешное получение категорий")
     @Test
     void getCategories_success() throws Exception {

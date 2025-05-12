@@ -4,24 +4,36 @@
 package sf.financialreports.dao.jooq.tables;
 
 
-import org.jooq.*;
-import org.jooq.Record;
-import org.jooq.impl.DSL;
-import org.jooq.impl.SQLDataType;
-import org.jooq.impl.TableImpl;
-import sf.financialreports.dao.jooq.Finances;
-import sf.financialreports.dao.jooq.Keys;
-import sf.financialreports.dao.jooq.tables.records.AuditRecord;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
+
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Function10;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Records;
+import org.jooq.Row10;
+import org.jooq.Schema;
+import org.jooq.SelectField;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
+
+import sf.financialreports.dao.jooq.Finances;
+import sf.financialreports.dao.jooq.Keys;
+import sf.financialreports.dao.jooq.tables.records.AuditRecord;
 
 
 /**
  * Аудит сервиса
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Audit extends TableImpl<AuditRecord> {
 
     private static final long serialVersionUID = 1L;

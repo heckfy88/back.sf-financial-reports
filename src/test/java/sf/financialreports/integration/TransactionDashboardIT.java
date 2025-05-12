@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ExtendWith(SpringExtension.class)
-public class TransactionDashboardIT extends AbstractIntegrationClass {
+class TransactionDashboardIT extends AbstractIntegrationClass {
 
     @DisplayName("Успешная загрузка CSV-файла с транзакциями")
     @Test
@@ -86,31 +86,7 @@ public class TransactionDashboardIT extends AbstractIntegrationClass {
                         .header("operUid", "9f8c1d45-b4e1-4f4b-9ad8-12b3d98f726e")
                         .header("Authorization", "Bearer " + tokenDto.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"senderBanks\": [\n" +
-                                "    \"Тинькофф\",\n" +
-                                "    \"Сбер\"\n" +
-                                "  ],\n" +
-                                "  \"receiverBanks\": [\n" +
-                                "    \"Тинькофф\",\n" +
-                                "    \"Сбер\"\n" +
-                                "  ],\n" +
-                                "  \"statuses\": [\n" +
-                                "    \"CONFIRMED\",\n" +
-                                "    \"NEW\"\n" +
-                                "  ],\n" +
-                                "  \"inn\": \"77070838993\",\n" +
-                                "  \"dateFrom\": \"2024-01-01\",\n" +
-                                "  \"dateTo\": \"2024-12-31\",\n" +
-                                "  \"specificDate\": \"2024-06-10\",\n" +
-                                "  \"amountFrom\": 1000,\n" +
-                                "  \"amountTo\": 10000,\n" +
-                                "  \"categoryType\": \"EXPENSE\",\n" +
-                                "  \"categoryNames\": [\n" +
-                                "    \"Продукты\",\n" +
-                                "    \"Связь\"\n" +
-                                "  ]\n" +
-                                "}")
+                        .content(readJsonFile("get_dashboard__success.json"))
                 ).andExpect(expectedStatus)
                 .andDo(print())
                 .andReturn()

@@ -6,16 +6,13 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sf.financialreports.service.AuthenticationService;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Configuration
-@RequiredArgsConstructor
 public class SwaggerConfig {
 
     private final Map<String, String> tokens = Map.ofEntries(
@@ -26,7 +23,7 @@ public class SwaggerConfig {
                             }
                             """)
             );
-    private final AuthenticationService authenticationService;
+
     @Bean
     OpenAPI openApiConfiguration() {
         return new OpenAPI()

@@ -37,7 +37,7 @@ public class AuthControllerIT extends AbstractIntegrationClass {
                 "password"
         );
 
-        String token = mvc.perform(post("/api/auth/login")
+        mvc.perform(post("/api/auth/login")
                         .content(mapper.writeValueAsString(loginDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("operUid", UUID.randomUUID().toString())

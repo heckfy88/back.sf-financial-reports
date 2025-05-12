@@ -1,10 +1,21 @@
--- Insert users (already done in your schema)
+--liquibase formatted sql
+--changeset heckfy88:5
+--comment: предзаполнение таблиц
 
--- Insert categories for users
--- User 1 (John Doe - PHYSICAL)
--- Insert categories
-INSERT INTO finances.category (id, user_id, name, description, type, created_at)
-VALUES ('11111111-1111-1111-1111-111111111111', '123e4567-e89b-12d3-a456-426614174000', 'Groceries',
+-- Для демонстрации работы, если бы это шло в прод, то этой миграции бы не было
+
+insert into finances.user (id, name, email, password_hash, type, created_at, is_active)
+values ('123e4567-e89b-12d3-a456-426614174000', 'John Doe', 'john.doe@example.com',
+        '$2a$12$/Nvsbyo9zPNow9VtkA5yLufPgQCDQBdongv6cwb3QAZwIl7prYUnu', 'PHYSICAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174001', 'Jane Doe', 'jane.doe@example.com',
+        '$2a$12$hSNGkB5qkK/tJS2Qgyiv9eaTKGHSUs9ZJcg4Aqn7M1ayF8xCmOvDW', 'PHYSICAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174002', 'John Smith', 'john.smith@example.com',
+        '$2a$12$4qxGESYATnYD5kQyJDDU2OpwU9GOvDwgoETaVthsSUIywy4wSX2dK', 'LEGAL', '2022-01-01 12:00:00', true),
+       ('123e4567-e89b-12d3-a456-426614174003', 'Company Inc.', 'company@example.com',
+        '$2a$12$CROd88OYK1C1VMg9Bzv./uP4GuUr1NL.qYNPvWv29Xamb.Q8/ga4a', 'LEGAL', '2022-01-01 12:00:00', true);
+
+insert into finances.category (id, user_id, name, description, type, created_at)
+values ('11111111-1111-1111-1111-111111111111', '123e4567-e89b-12d3-a456-426614174000', 'Groceries',
         'Daily food and supermarket expenses', 'EXPENSE', now()),
        ('22222222-2222-2222-2222-222222222222', '123e4567-e89b-12d3-a456-426614174000', 'Salary',
         'Monthly income fromDomain job', 'INCOME', now()),
@@ -13,11 +24,11 @@ VALUES ('11111111-1111-1111-1111-111111111111', '123e4567-e89b-12d3-a456-4266141
        ('44444444-4444-4444-4444-444444444444', '123e4567-e89b-12d3-a456-426614174000', 'Freelance',
         'Income fromDomain freelance work', 'INCOME', now());
 
--- Insert transactions
-INSERT INTO finances.transaction (user_id, category_name, "date", description, amount, status, sender_bank,
+
+insert into finances.transaction (user_id, category_name, "date", description, amount, status, sender_bank,
                                   sender_account, receiver_bank, receiver_account, receiver_inn, receiver_phone,
                                   receiver_user_type)
-VALUES ('123e4567-e89b-12d3-a456-426614174000', 'Groceries', current_date - interval '10 day',
+values ('123e4567-e89b-12d3-a456-426614174000', 'Groceries', current_date - interval '10 day',
         'Weekly grocery shopping', 150.75, 'COMPLETED', 'Bank A', '1234567890', 'Store Bank', '9876543210',
         '123456789012', '+1234567890', 'LEGAL'),
        ('123e4567-e89b-12d3-a456-426614174000', 'Salary', current_date - interval '30 day', 'Monthly salary for April',

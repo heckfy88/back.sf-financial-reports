@@ -26,13 +26,13 @@ public class TransactionFilterDto {
     @Schema(description = "ИНН получателя", example = "77070838993")
     private String inn;
 
-    @Schema(description = "Дата от", example = "2024.01.01")
+    @Schema(description = "Дата от", example = "2024-01-01")
     private LocalDate dateFrom;
 
-    @Schema(description = "Дата до", example = "2024.12.31")
+    @Schema(description = "Дата до", example = "2024-12-31")
     private LocalDate dateTo;
 
-    @Schema(description = "Конкретная дата", example = "2024.06.10")
+    @Schema(description = "Конкретная дата", example = "2024-06-10")
     private LocalDate specificDate;
 
     @Schema(description = "Минимальная сумма", example = "1000.00")
