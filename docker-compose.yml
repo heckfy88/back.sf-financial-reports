@@ -32,7 +32,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: 1978
       JWT_SECRET: thisisaverylongsecretkeywithenoughlength!!
       JWT_ISSUER: financial-reports
-      ALLOWED_ORIGINS: http://localhost:3000
     networks:
       - backend
 

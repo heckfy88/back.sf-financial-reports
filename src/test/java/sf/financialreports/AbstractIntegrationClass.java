@@ -2,20 +2,28 @@ package sf.financialreports;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.StreamUtils;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sf.financialreports.api.dto.login.LoginDto;
 import sf.financialreports.api.dto.login.TokenDto;
+
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Testcontainers
 public abstract class AbstractIntegrationClass {
     @Container
@@ -49,6 +58,7 @@ public abstract class AbstractIntegrationClass {
         String token = mvc.perform(post("/api/auth/login")
                         .content(mapper.writeValueAsString(loginDto))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("operUid", UUID.randomUUID().toString())
                 ).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -63,5 +73,10 @@ public abstract class AbstractIntegrationClass {
         registry.add("spring.datasource.url", postgresContainer::getJdbcUrl);
         registry.add("spring.datasource.username", postgresContainer::getUsername);
         registry.add("spring.datasource.password", postgresContainer::getPassword);
+    }
+
+    protected String readJsonFile(String fileName) throws Exception {
+        ClassPathResource resource = new ClassPathResource("/json/" + fileName);
+        return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
     }
 }

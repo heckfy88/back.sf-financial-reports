@@ -4,21 +4,33 @@
 package sf.financialreports.dao.jooq.tables;
 
 
-import org.jooq.*;
-import org.jooq.Record;
-import org.jooq.impl.DSL;
-import org.jooq.impl.SQLDataType;
-import org.jooq.impl.TableImpl;
-import sf.financialreports.dao.jooq.Finances;
-import sf.financialreports.dao.jooq.Keys;
-import sf.financialreports.dao.jooq.enums.UserType;
-import sf.financialreports.dao.jooq.tables.records.UserRecord;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
+
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Function7;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Records;
+import org.jooq.Row7;
+import org.jooq.Schema;
+import org.jooq.SelectField;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
+
+import sf.financialreports.dao.jooq.Finances;
+import sf.financialreports.dao.jooq.Keys;
+import sf.financialreports.dao.jooq.enums.UserType;
+import sf.financialreports.dao.jooq.tables.records.UserRecord;
 
 
 /**

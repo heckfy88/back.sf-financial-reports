@@ -4,19 +4,20 @@
 package sf.financialreports.dao.jooq.tables.records;
 
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record15;
 import org.jooq.Row15;
 import org.jooq.impl.UpdatableRecordImpl;
+
 import sf.financialreports.dao.jooq.enums.TransactionStatus;
 import sf.financialreports.dao.jooq.enums.UserType;
 import sf.financialreports.dao.jooq.tables.Transaction;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 /**

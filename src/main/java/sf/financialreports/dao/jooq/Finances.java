@@ -4,16 +4,17 @@
 package sf.financialreports.dao.jooq;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
+
 import sf.financialreports.dao.jooq.tables.Audit;
 import sf.financialreports.dao.jooq.tables.Category;
 import sf.financialreports.dao.jooq.tables.Transaction;
 import sf.financialreports.dao.jooq.tables.User;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -59,13 +60,13 @@ public class Finances extends SchemaImpl {
 
     @Override
     public Catalog getCatalog() {
-        return sf.financialreports.dao.jooq.DefaultCatalog.DEFAULT_CATALOG;
+        return DefaultCatalog.DEFAULT_CATALOG;
     }
 
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-                Audit.AUDIT,
+            Audit.AUDIT,
             Category.CATEGORY,
             Transaction.TRANSACTION,
             User.USER

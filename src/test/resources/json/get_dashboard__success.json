@@ -1,0 +1,25 @@
+{
+  "senderBanks": [
+    "Тинькофф",
+    "Сбер"
+  ],
+  "receiverBanks": [
+    "Тинькофф",
+    "Сбер"
+  ],
+  "statuses": [
+    "CONFIRMED",
+    "NEW"
+  ],
+  "inn": "77070838993",
+  "dateFrom": "2024-01-01",
+  "dateTo": "2024-12-31",
+  "specificDate": "2024-06-10",
+  "amountFrom": 1000,
+  "amountTo": 10000,
+  "categoryType": "EXPENSE",
+  "categoryNames": [
+    "Продукты",
+    "Связь"
+  ]
+}

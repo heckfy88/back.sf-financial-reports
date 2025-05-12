@@ -4,16 +4,17 @@
 package sf.financialreports.dao.jooq.tables.records;
 
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
+
 import sf.financialreports.dao.jooq.enums.CategoryType;
 import sf.financialreports.dao.jooq.tables.Category;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 /**

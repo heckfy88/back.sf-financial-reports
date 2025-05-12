@@ -1,6 +1,5 @@
 package sf.financialreports.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,14 +17,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDto {
-    @Schema(description = "Идентификатор транзакции",
-            example = "d290f1ee-6c54-4b01-90e6-d701748f0851",
-            accessMode = Schema.AccessMode.READ_ONLY
-    )
+    @Schema(description = "Идентификатор транзакции", example = "d290f1ee-6c54-4b01-90e6-d701748f0851")
     private UUID id;
     @Schema(description = "Категория транзакции")
     private CategoryDto category;
-    @Schema(description = "Дата транзакции", example = "2024-12-01")
+    @Schema(description = "Дата транзакции", example = "2024.12.01")
     private String date;
     @Schema(description = "Описание транзакции", example = "Оплата услуг связи")
     private String description;

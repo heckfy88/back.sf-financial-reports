@@ -1,0 +1,24 @@
+{
+  "id": "44444444-4444-4444-4444-444444444444",
+  "category": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "Зарплата",
+    "description": "Регулярный доход от работодателя",
+    "type": "INCOME"
+  },
+  "date": "2024.12.01",
+  "description": "Оплата услуг связи",
+  "amount": 1500.75,
+  "status": {
+    "name": "CONFIRMED",
+    "title": "Подтвержденная",
+    "weight": 100
+  },
+  "senderBank": "Сбербанк",
+  "senderAccount": "40817810099910000000",
+  "receiverUserType": "LEGAL",
+  "receiverBank": "Тинькофф",
+  "receiverAccount": "40702810900000000000",
+  "receiverInn": "77070838993",
+  "receiverPhone": "+79991234567"
+}
