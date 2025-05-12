@@ -82,6 +82,7 @@ public class TransactionRepository {
         return dslContext.select(TRANSACTION_FIELDS)
                 .from(TRANSACTION)
                 .where(TRANSACTION.USER_ID.eq(userId))
+                .and(TRANSACTION.STATUS.ne(TransactionStatus.DELETED))
                 .fetchInto(Transaction.class);
     }
 
